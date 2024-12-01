@@ -4,15 +4,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        'VERDE-ESCURO': '#134645',
-        'VERDE-CLARO': '#145C5B',
-        'CINZA-ESCURO': '#4B4B4B',
-        'CINZA-CLARO': '#767373',
-        'CINZA-PRETO': '#2C2C2C',
-        'AMARELO-ESCURO': '#C1A816',
-        'AMARELO-CLARO': '#DECA58',
-        'VERMELHO-ESCURO': '#9B1B1B',
-        'VERMELHO-CLARO': '#AE3737',
+        'green-dark': '#134645',
+        'green-light': '#145C5B',
+        'grey-dark': '#4B4B4B',
+        'grey-light': '#767373',
+        'black-light': '#2C2C2C',
+        'yellow-dark': '#C1A816',
+        'yellow-light': '#DECA58',
+        'red-dark': '#9B1B1B',
+        'red-light': '#AE3737',
+      },
+      fontFamily: {
+        inter: ['Inter', 'sans-serif'], // Adiciona "Inter" como fonte personalizada
       },
       backgroundImage: {
         'logo-horizontal': "url('/assets/images/logo_horizontal.png')",
