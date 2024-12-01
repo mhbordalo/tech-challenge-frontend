@@ -14,9 +14,6 @@ export default {
         'red-dark': '#9B1B1B',
         'red-light': '#AE3737',
       },
-      fontFamily: {
-        inter: ['Inter', 'sans-serif'], // Adiciona "Inter" como fonte personalizada
-      },
       backgroundImage: {
         'logo-horizontal': "url('/assets/images/logo_horizontal.png')",
       },
