@@ -1,50 +1,49 @@
-# React + TypeScript + Vite
+# TECH-CHALLENGE-FRONTEND
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Tech Challenge Frontend é uma interface gráfica em React desenvolvida como atividade que integra os conhecimentos adquiridos durante o módulo de Frontend, Fase 3 da Pós Tech FIAP Full Stack Development, do Grupo 1, Turma 2FSDT.
 
-Currently, two official plugins are available:
+Membros do grupo 1 - 2FSDT:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- RM: 357717 Cristiano Gomes da Rocha,
+- RM: 357154 Diego da Silva Gervasio,
+- RM: 357480 Douglas Yogi Yokomizo,
+- RM: 356535 João Vitor dos Santos Correa,
+- RM: 357920 Marcos Alberto Herrera Bordalo.
 
-## Expanding the ESLint configuration
+## Objetivo
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+O objetivo desta interface gráfica é fornecer uma aplicação blogging robusta, responsiva, acessível e fácil de usar, permitindo aos docentes e alunos(as) interagir e gerenciar postagens de blog por meio de operações de criação, edição, deleção e listagens de post, utilizando login de autenticação e assim facilitando a gestão de conteúdo par os autores e administradores.
 
-- Configure the top-level `parserOptions` property like this:
+## Relato de experiências e desafios
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+Desde o início, o grupo decidiu versionar o código diretamente no GitHub, o que permitiu uma organização eficiente da estrutura inicial e dos padrões do projeto. A cada etapa da implementação da interface, todos os integrantes eram notificados sobre novos Pull Requests (PRs) abertos na branch principal, garantindo a colaboração contínua e a revisão conjunta do código.
+
+As aulas da Fase 3 foram fundamentais para o desenvolvimento do projeto, fornecendo a base necessária para avançarmos com confiança. Sempre que surgiam dúvidas ou obstáculos, reassistir as aulas ou buscar soluções na internet tornou o processo de resolução de problemas mais ágil e eficaz.
+
+Além disso, os encontros semanais de todo o grupo desempenharam um papel crucial, promovendo discussões e alinhamentos que contribuíram para o progresso contínuo e a conclusão bem-sucedida do projeto.
+
+---
+
+## Video de apresentação da API
+
+---
+
+## Tecnologias utilizadas
+
+- React
+
+---
+
+## Instalação da aplicação
+
+Este projeto está pronto para ser executado em um ambiente Docker. Por este motivo, será necessária apenas a instalação do Docker, não sendo necessária a instalação manual do projeto.
+
+Caso não tenha o Docker instalado, siga as instruções para seu sistema operacional na [documentação oficial do Docker](https://docs.docker.com/get-started/get-docker/).
+
+- Subir a aplicação utilizando Docker:
+
+```bash
+docker-compose up --build
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+---
