@@ -1,15 +1,16 @@
-import CardHome from './components/CardHome'
-import postContents from './postsMock.json'
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
 
+const router = createRouter({ routeTree })
+
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
+}
 
 export default function App() {
-
   return (
-    <div className="container max-lg mx-auto flex flex-wrap justify-center">
-      {postContents.map((postContent) => (
-        <CardHome postContent={postContent} key={postContent.id} admin={true} />
-      ))}
-
-    </div>
+    <RouterProvider router={router} />
   )
 }
