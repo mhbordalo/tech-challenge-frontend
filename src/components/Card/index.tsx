@@ -1,38 +1,64 @@
-import { PostContent } from '../../types'
-import { Button } from '../Button'
+import { Post } from '../../types';
+import { Button } from '../Button';
+import imageNotAvailable from '/assets/images/image_not_available.png';
 
 interface CardHomeProps {
-  postContent: PostContent
-  admin?: boolean
+  post: Post;
+  admin?: boolean;
+  seTpostToEdit: React.Dispatch<React.SetStateAction<Post>>;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  handleDeletePost: (id: number) => void
 }
 
 export default function CardHome({
-  postContent,
+  post,
   admin = false,
+  seTpostToEdit,
+  setShowModal,
+  handleDeletePost
 }: CardHomeProps) {
-  const {id, name, title, text, imageUrl, imageAlt } = postContent
+  const { id, name, title, content, image } = post;
 
   function handleClickButtonRead() {
-    console.log('read ', id)
+    console.log('read ', id);
   }
 
   function handleClickButtonEdit() {
-    console.log('edit ', id)
+    seTpostToEdit(post);
+    setShowModal(true);
   }
 
   function handleClickButtonDelete() {
-    console.log('delete ', id)
+    handleDeletePost(post.id)
+
+    console.log('delete ', id);
   }
 
+<<<<<<< HEAD:src/components/CardHome/index.tsx
+  const renderImage = () => {
+    if (typeof image === 'string') {
+      return <img className="w-full h-44" src={image} alt={`imagem ${title}`} />;
+    } else if (image instanceof File) {
+      return <img className="w-full h-44" src={URL.createObjectURL(image)} alt={`imagem ${title}`} />;
+    } else {
+      return <img className="w-full h-44" src={imageNotAvailable} alt={`imagem not found`} />;
+    }
+  };
+
+  return (
+    <div className="w-96 h-96 rounded overflow-hidden shadow-lg m-2 relative ">
+      {renderImage()}
+=======
   return (
     <div className="w-96 h-96 rounded overflow-hidden shadow-lg m-2 relative mb-5">
       <img className="w-full h-44" src={imageUrl} alt={imageAlt} />
+>>>>>>> 4b73008007be3829a3768e356db6edaa9aa24b97:src/components/Card/index.tsx
       <div className="px-6">
-        <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs  text-gray-700 mr-2 mt-3">
+        <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs text-gray-700 mr-2 mt-3">
           {name}
         </span>
         <div className="font-bold text-xl pt-2 pb-1">{title}</div>
-        <p className="text-black text-base leading-none line-clamp-3">{text}</p>
+        <p className="text-black text-base leading-none line-clamp-3">{content}</p>
       </div>
 
       {admin ? (
@@ -52,5 +78,5 @@ export default function CardHome({
         </div>
       )}
     </div>
-  )
+  );
 }
