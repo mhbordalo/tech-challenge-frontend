@@ -18,7 +18,7 @@ export function Header() {
   return (
     <nav className="bg-white border-b border-gray-100">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-5">
-            <Link href="/home" className="flex items-center space-x-3 rtl:space-x-reverse">
+            <Link href="/home" className="flex items-center ms-3 space-x-3 rtl:space-x-reverse">
                 <img src={logoHorinzontal} alt="Logo" className="w-60 md:w-56"/>
             </Link>
 
@@ -48,13 +48,13 @@ export function Header() {
 
         <div className={`${ isMenuOpen ? "block" : "hidden"} w-full md:block md:w-auto`} id="navbar-default">
           <ul className="font-medium flex flex-col p-4 md:p-0 md:flex-row md:space-x-8">
-              <Link href="/home" className="flex gap-2 text-sm py-2 px-3 text-green-dark rounded md:bg-transparent md:p-0 items-center">
+              <Link href="/home" className="flex gap-2 text-sm py-2 px-3 text-green-dark hover:text-gray-500 rounded md:bg-transparent md:p-0 items-center">
                 <img src={newPost} alt="" className="w-4.1 h-5" /> Criar Publicação
               </Link>
-              <Link href="/home" className="flex gap-2 text-sm py-2 px-3 text-green-dark rounded md:bg-transparent md:p-0 items-center">
+              <Link href="/home" className="flex gap-2 text-sm py-2 px-3 text-green-dark hover:text-gray-500 rounded md:bg-transparent md:p-0 items-center">
                 <img src={adminPanel} alt="" className="w-4.1 h-5" />Área Administrativa
               </Link>
-              <Link href="/home" className="flex gap-2 text-sm py-2 px-3 text-green-dark rounded md:bg-transparent md:p-0 items-center">
+              <Link href="/home" className="flex gap-2 text-sm py-2 px-3 text-green-dark hover:text-gray-500 rounded md:bg-transparent md:p-0 items-center">
                 <img src={logout} alt="" className="w-4.1 h-5" /> Logout
               </Link>
           </ul>
