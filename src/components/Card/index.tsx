@@ -24,11 +24,8 @@ export default function CardHome({
     console.log('delete ', id)
   }
 
-
-
-
   return (
-    <div className="w-96 h-96 rounded overflow-hidden shadow-lg m-2 relative ">
+    <div className="w-96 h-96 rounded overflow-hidden shadow-lg m-2 relative mb-5">
       <img className="w-full h-44" src={imageUrl} alt={imageAlt} />
       <div className="px-6">
         <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs  text-gray-700 mr-2 mt-3">
