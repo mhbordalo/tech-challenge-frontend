@@ -17,6 +17,7 @@ export default {
       backgroundImage: {
         'logo-horizontal': "url('/assets/images/logo_horizontal.png')",
         'login-page': "url('/assets/images/BackgroundLogin.jpg')",
+        'bg-intro': "url('/assets/images/BackgroundIntro.jpg')",
       },
     },
   },

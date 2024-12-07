@@ -1,9 +1,25 @@
+<<<<<<< HEAD
 import { useState } from 'react'
 import CardHome from './components/CardHome'
 import ModalForm from './components/ModalForm'
 import listaPostsJson from './utils/postsMock.json'
 import { FormPost } from './components/FormPost'
 import { Post } from './types'
+=======
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const router = createRouter({ routeTree })
+
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
+}
+>>>>>>> 4b73008007be3829a3768e356db6edaa9aa24b97
+
+const queryClient = new QueryClient();
 
 export default function App() {
   const [listPosts, setListPosts] = useState<Post[]>(listaPostsJson)
@@ -31,6 +47,7 @@ export default function App() {
 
 
   return (
+<<<<<<< HEAD
     <>
       <div className="container max-lg mx-auto flex flex-wrap justify-center">
         {listPosts.map((post) => (
@@ -53,5 +70,10 @@ export default function App() {
         </div>
       </ModalForm>
     </>
+=======
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+>>>>>>> 4b73008007be3829a3768e356db6edaa9aa24b97
   )
 }
