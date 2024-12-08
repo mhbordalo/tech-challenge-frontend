@@ -4,5 +4,4 @@ export type Post = {
   title: string;
   content: string;
   image: string | File | null;
-
 }

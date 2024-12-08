@@ -1,31 +1,48 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { usePosts } from '../../hooks/usePosts';
-import CardHome from '../../components/Card';
-import { PostContent } from '../../types';
-import { Intro } from '../../components/Intro';
+import { usePosts } from '../../hooks/usePosts'
+import { Card } from '../../components/Card'
+import { Intro } from '../../components/Intro'
+import { ModalForm } from '../../components/ModalForm';
+import { Post } from '../../types'
+import { FormPost } from '../../components/FormPost'
 
 export const Route = createFileRoute('/Home/')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-
   const { data: posts, isLoading, error } = usePosts();
   const [searchTerm, setSearchTerm] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [postToEdit, setPostToEdit] = useState<Post | null>(null);
+  const [admin, setAdmin] = useState<boolean>(false);
 
-  if (isLoading) return <p>Carregando...</p>;
-  if (error instanceof Error) return <p>Erro: {error.message}</p>;
+  useEffect(() => {
+    const userIsAdmin = true;
+    setAdmin(userIsAdmin);
+  }, []);
 
-  const filteredPosts = posts?.filter((post: PostContent) =>
-    post.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  if (isLoading) return <p>Carregando...</p>
+  if (error instanceof Error) return <p>Erro: {error.message}</p>
+
+  function handleDeletePost(id: number) {
+    console.log(`Deletar post com ID: ${id}`);
+  }
+
+  function handleEditedPost(postEdited: Post) {
+    console.log('Post editado:', postEdited);
+  }
+
+  const filteredPosts = posts?.filter((post: Post) =>
+    post.title.toLowerCase().includes(searchTerm.toLowerCase()),
+  )
 
   return (
     <>
-      <Intro 
-        title='ÚLTIMAS NOTÍCIAS'
-        description='ACOMPANHE TUDO EM UM SÓ LUGAR'
+      <Intro
+        title="ÚLTIMAS NOTÍCIAS"
+        description="ACOMPANHE TUDO EM UM SÓ LUGAR"
       />
 
       <div className="max-w-screen-xl mx-auto pt-10 flex flex-wrap justify-center px-12">
@@ -45,22 +62,38 @@ function RouteComponent() {
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1112 4.5a7.5 7.5 0 014.65 12.15z"
-            />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1112 4.5a7.5 7.5 0 014.65 12.15z"
+              />
             </svg>
           </div>
         </div>
       </div>
 
+      <ModalForm isVisible={showModal} onClose={() => setShowModal(false)}>
+        {postToEdit && (
+          <FormPost postToEdit={postToEdit} handleEditedPostList={handleEditedPost} />
+        )}
+      </ModalForm>
+
       <div className="max-w-screen-xl mx-auto py-10 flex flex-wrap justify-center">
-        {filteredPosts?.map((post : PostContent) => (
-          <CardHome key={post.id} postContent={post} />
-        ))}
-        {!filteredPosts?.length && <p>Nenhum post encontrado </p>}
+        {filteredPosts?.length ? (
+          filteredPosts.map((post: Post) => (
+            <Card
+              key={post.id}
+              post={post}
+              admin={admin}
+              setPostToEdit={setPostToEdit}
+              setShowModal={setShowModal}
+              handleDeletePost={handleDeletePost}
+            />
+          ))
+        ) : (
+          <p className="text-gray-500">Nenhum post encontrado.</p>
+        )}
       </div>
     </>
   )

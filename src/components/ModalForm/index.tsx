@@ -4,7 +4,7 @@ interface ModalFormProps {
   children: React.ReactNode
 }
 
-export default function ModalForm({
+export function ModalForm({
   isVisible,
   onClose,
   children,
