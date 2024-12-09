@@ -11,17 +11,10 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
 import { Route as LoginIndexImport } from './routes/Login/index'
 import { Route as HomeIndexImport } from './routes/Home/index'
 
 // Create/Update Routes
-
-const IndexRoute = IndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const LoginIndexRoute = LoginIndexImport.update({
   id: '/Login/',
@@ -39,13 +32,6 @@ const HomeIndexRoute = HomeIndexImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
     '/Home/': {
       id: '/Home/'
       path: '/Home'
@@ -66,41 +52,36 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '/Home': typeof HomeIndexRoute
   '/Login': typeof LoginIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/Home': typeof HomeIndexRoute
   '/Login': typeof LoginIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
   '/Home/': typeof HomeIndexRoute
   '/Login/': typeof LoginIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/Home' | '/Login'
+  fullPaths: '/Home' | '/Login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/Home' | '/Login'
-  id: '__root__' | '/' | '/Home/' | '/Login/'
+  to: '/Home' | '/Login'
+  id: '__root__' | '/Home/' | '/Login/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   HomeIndexRoute: typeof HomeIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   HomeIndexRoute: HomeIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
 }
@@ -115,13 +96,9 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
         "/Home/",
         "/Login/"
       ]
-    },
-    "/": {
-      "filePath": "index.tsx"
     },
     "/Home/": {
       "filePath": "Home/index.tsx"

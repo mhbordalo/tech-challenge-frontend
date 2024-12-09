@@ -26,8 +26,8 @@ function RouteComponent() {
   if (isLoading) return <p>Carregando...</p>
   if (error instanceof Error) return <p>Erro: {error.message}</p>
 
-  function handleDeletePost(id: number) {
-    console.log(`Deletar post com ID: ${id}`)
+  function handleDeletePost(_id: string) {
+    console.log(`Deletar post com ID: ${_id}`)
   }
 
   function handleEditedPost(postEdited: Post) {
@@ -86,7 +86,7 @@ function RouteComponent() {
         {filteredPosts?.length ? (
           filteredPosts.map((post: Post) => (
             <Card
-              key={post.id}
+              key={post._id}
               post={post}
               admin={admin}
               setPostToEdit={setPostToEdit}

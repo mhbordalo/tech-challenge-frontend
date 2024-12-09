@@ -20,7 +20,13 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    /* Alias Configuration */
+    "baseUrl": ".", // Define o diretório base
+    "paths": {
+      "@/*": ["src/*"] // Alias "@" mapeado para "src"
+    }
   },
   "include": ["src"]
 }

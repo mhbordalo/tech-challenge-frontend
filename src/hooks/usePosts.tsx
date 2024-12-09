@@ -1,18 +1,18 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
 
 async function fetchPosts() {
-  const response = await fetch('postsMock.json'); 
-  if (!response.ok) {
-    throw new Error('Erro ao buscar os posts');
-  }
-  return response.json();
+  const response = await axios.get(
+    'https://tech-challenge-back-end.vercel.app/posts',
+  )
+  return response.data
 }
 
 export function usePosts() {
-    return useQuery({
-      queryKey: ['posts'],
-      queryFn: fetchPosts,
-      staleTime: 1000 * 60 * 5, 
-      refetchOnWindowFocus: false,
-    });
+  return useQuery({
+    queryKey: ['posts'],
+    queryFn: fetchPosts,
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+  })
 }
