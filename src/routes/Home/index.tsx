@@ -6,6 +6,7 @@ import { Intro } from '../../components/Intro'
 import { ModalForm } from '../../components/ModalForm'
 import { Post } from '../../types'
 import { FormPost } from '../../components/FormPost'
+import { useAuth } from '../../context/AuthContext'
 
 export const Route = createFileRoute('/Home/')({
   component: RouteComponent,
@@ -16,12 +17,9 @@ function RouteComponent() {
   const [searchTerm, setSearchTerm] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [postToEdit, setPostToEdit] = useState<Post | null>(null)
-  const [admin, setAdmin] = useState<boolean>(false)
+  const { isAdmin } = useAuth()
 
-  useEffect(() => {
-    const userIsAdmin = true
-    setAdmin(userIsAdmin)
-  }, [])
+  useEffect(() => {}, [isAdmin])
 
   if (isLoading) return <p>Carregando...</p>
   if (error instanceof Error) return <p>Erro: {error.message}</p>
@@ -88,7 +86,7 @@ function RouteComponent() {
             <Card
               key={post._id}
               post={post}
-              admin={admin}
+              admin={isAdmin}
               setPostToEdit={setPostToEdit}
               setShowModal={setShowModal}
               handleDeletePost={handleDeletePost}
