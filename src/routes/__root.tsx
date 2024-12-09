@@ -9,11 +9,8 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   const matches = useMatches()
-
-  const routesToHideRoot = ['/']
-
+  const routesToHideRoot = ['/Login/']
   const currentRoute = matches[matches.length - 1]?.pathname
-
   const shouldHideRoot = routesToHideRoot.includes(currentRoute)
 
   return (

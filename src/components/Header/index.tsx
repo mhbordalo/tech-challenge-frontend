@@ -1,15 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 
 import logoHorinzontal from "/assets/images/logo_horizontal.png";
 
 import newPost from "/assets/icons/edit_document.png";
 import adminPanel from "/assets/icons/admin_panel_settings.png";
-// import login from "/assets/icons/login.png";
+import login from "/assets/icons/login.png";
 import logout from "/assets/icons/logout.png";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [admin, setAdmin] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  useEffect(() => {
+
+    const userIsLoggedIn = true;
+    const userIsAdmin = true; 
+
+    setIsLoggedIn(userIsLoggedIn);
+    setAdmin(userIsLoggedIn && userIsAdmin);
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -48,15 +59,43 @@ export function Header() {
 
         <div className={`${ isMenuOpen ? "block" : "hidden"} w-full md:block md:w-auto`} id="navbar-default">
           <ul className="font-medium flex flex-col p-4 md:p-0 md:flex-row md:space-x-8">
-              <Link href="/home" className="flex gap-2 text-sm py-2 px-3 text-green-dark hover:text-gray-500 rounded md:bg-transparent md:p-0 items-center">
-                <img src={newPost} alt="" className="w-4.1 h-5" /> Criar Publicação
+            {admin && (
+                <Link
+                  href="/home"
+                  className="flex gap-2 text-sm py-2 px-3 text-green-dark hover:text-gray-500 rounded md:bg-transparent md:p-0 items-center"
+                >
+                  <img src={newPost} alt="Criar Publicação" className="w-4.1 h-5" />
+                  Criar Publicação
+                </Link>
+              )}
+              
+              {admin && (
+                <Link
+                  href="/home"
+                  className="flex gap-2 text-sm py-2 px-3 text-green-dark hover:text-gray-500 rounded md:bg-transparent md:p-0 items-center"
+                >
+                  <img src={adminPanel} alt="Área Administrativa" className="w-4.1 h-5" />
+                  Área Administrativa
+                </Link>
+            )}
+
+            {!isLoggedIn ? (
+              <Link
+                href="/login"
+                className="flex gap-2 text-sm py-2 px-3 text-green-dark hover:text-gray-500 rounded md:bg-transparent md:p-0 items-center"
+              >
+                <img src={login} alt="Login" className="w-4.1 h-5" />
+                Login
               </Link>
-              <Link href="/home" className="flex gap-2 text-sm py-2 px-3 text-green-dark hover:text-gray-500 rounded md:bg-transparent md:p-0 items-center">
-                <img src={adminPanel} alt="" className="w-4.1 h-5" />Área Administrativa
+            ) : (
+              <Link
+                href="/logout"
+                className="flex gap-2 text-sm py-2 px-3 text-green-dark hover:text-gray-500 rounded md:bg-transparent md:p-0 items-center"
+              >
+                <img src={logout} alt="Logout" className="w-4.1 h-5" />
+                Logout
               </Link>
-              <Link href="/home" className="flex gap-2 text-sm py-2 px-3 text-green-dark hover:text-gray-500 rounded md:bg-transparent md:p-0 items-center">
-                <img src={logout} alt="" className="w-4.1 h-5" /> Logout
-              </Link>
+            )}
           </ul>
         </div>
       </div>
