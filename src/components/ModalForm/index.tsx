@@ -39,10 +39,10 @@ export function ModalForm({ isVisible, onClose, children }: ModalFormProps) {
     >
       <div className="relative w-[627px] bg-white p-6 rounded shadow-lg">
         <button
-          className="absolute text-black right-5 top-3 text-xl"
+          className="absolute text-black right-5 top-3 text-lg"
           onClick={() => onClose()}
         >
-          X
+          x
         </button>
         {children}
       </div>
