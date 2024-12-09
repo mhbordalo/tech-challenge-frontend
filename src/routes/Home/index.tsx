@@ -3,7 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { usePosts } from '../../hooks/usePosts'
 import { Card } from '../../components/Card'
 import { Intro } from '../../components/Intro'
-import { ModalForm } from '../../components/ModalForm';
+import { ModalForm } from '../../components/ModalForm'
 import { Post } from '../../types'
 import { FormPost } from '../../components/FormPost'
 
@@ -12,26 +12,26 @@ export const Route = createFileRoute('/Home/')({
 })
 
 function RouteComponent() {
-  const { data: posts, isLoading, error } = usePosts();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showModal, setShowModal] = useState(false);
-  const [postToEdit, setPostToEdit] = useState<Post | null>(null);
-  const [admin, setAdmin] = useState<boolean>(false);
+  const { data: posts, isLoading, error } = usePosts()
+  const [searchTerm, setSearchTerm] = useState('')
+  const [showModal, setShowModal] = useState(false)
+  const [postToEdit, setPostToEdit] = useState<Post | null>(null)
+  const [admin, setAdmin] = useState<boolean>(false)
 
   useEffect(() => {
-    const userIsAdmin = true;
-    setAdmin(userIsAdmin);
-  }, []);
+    const userIsAdmin = true
+    setAdmin(userIsAdmin)
+  }, [])
 
   if (isLoading) return <p>Carregando...</p>
   if (error instanceof Error) return <p>Erro: {error.message}</p>
 
-  function handleDeletePost(id: number) {
-    console.log(`Deletar post com ID: ${id}`);
+  function handleDeletePost(_id: string) {
+    console.log(`Deletar post com ID: ${_id}`)
   }
 
   function handleEditedPost(postEdited: Post) {
-    console.log('Post editado:', postEdited);
+    console.log('Post editado:', postEdited)
   }
 
   const filteredPosts = posts?.filter((post: Post) =>
@@ -75,7 +75,10 @@ function RouteComponent() {
 
       <ModalForm isVisible={showModal} onClose={() => setShowModal(false)}>
         {postToEdit && (
-          <FormPost postToEdit={postToEdit} handleEditedPostList={handleEditedPost} />
+          <FormPost
+            postToEdit={postToEdit}
+            handleEditedPostList={handleEditedPost}
+          />
         )}
       </ModalForm>
 
@@ -83,7 +86,7 @@ function RouteComponent() {
         {filteredPosts?.length ? (
           filteredPosts.map((post: Post) => (
             <Card
-              key={post.id}
+              key={post._id}
               post={post}
               admin={admin}
               setPostToEdit={setPostToEdit}

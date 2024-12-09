@@ -1,7 +1,7 @@
 export type Post = {
-  id: number;
-  name: string;
-  title: string;
-  content: string;
-  image: string | File | null;
+  _id: string
+  author: string
+  title: string
+  content: string
+  img: string | File | null
 }
