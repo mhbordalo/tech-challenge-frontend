@@ -1,8 +1,7 @@
-export type PostContent = {
-  id: number;
-  name: string;
-  title: string;
-  text: string;
-  imageUrl: string;
-  imageAlt: string;
+export type Post = {
+  _id: string
+  author: string
+  title: string
+  content: string
+  img: string | File | null
 }
