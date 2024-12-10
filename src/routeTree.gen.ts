@@ -11,14 +11,14 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as LoginIndexImport } from './routes/login/index'
+import { Route as LoginIndexImport } from './routes/Login/index'
 import { Route as HomeIndexImport } from './routes/Home/index'
 
 // Create/Update Routes
 
 const LoginIndexRoute = LoginIndexImport.update({
-  id: '/login/',
-  path: '/login/',
+  id: '/Login/',
+  path: '/Login/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -39,10 +39,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeIndexImport
       parentRoute: typeof rootRoute
     }
-    '/login/': {
-      id: '/login/'
-      path: '/login'
-      fullPath: '/login'
+    '/Login/': {
+      id: '/Login/'
+      path: '/Login'
+      fullPath: '/Login'
       preLoaderRoute: typeof LoginIndexImport
       parentRoute: typeof rootRoute
     }
@@ -53,26 +53,26 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/Home': typeof HomeIndexRoute
-  '/login': typeof LoginIndexRoute
+  '/Login': typeof LoginIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/Home': typeof HomeIndexRoute
-  '/login': typeof LoginIndexRoute
+  '/Login': typeof LoginIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/Home/': typeof HomeIndexRoute
-  '/login/': typeof LoginIndexRoute
+  '/Login/': typeof LoginIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/Home' | '/login'
+  fullPaths: '/Home' | '/Login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/Home' | '/login'
-  id: '__root__' | '/Home/' | '/login/'
+  to: '/Home' | '/Login'
+  id: '__root__' | '/Home/' | '/Login/'
   fileRoutesById: FileRoutesById
 }
 
@@ -97,14 +97,14 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/Home/",
-        "/login/"
+        "/Login/"
       ]
     },
     "/Home/": {
       "filePath": "Home/index.tsx"
     },
-    "/login/": {
-      "filePath": "login/index.tsx"
+    "/Login/": {
+      "filePath": "Login/index.tsx"
     }
   }
 }

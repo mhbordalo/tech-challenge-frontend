@@ -5,7 +5,7 @@ import { useLogin } from '../../hooks/useLogin'
 import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 
-export const Route = createFileRoute('/login/')({
+export const Route = createFileRoute('/Login/')({
   component: RouteComponent,
 })
 

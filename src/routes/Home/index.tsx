@@ -7,6 +7,7 @@ import { ModalForm } from '../../components/ModalForm'
 import { Post } from '../../types'
 import { FormPost } from '../../components/FormPost'
 import { useAuth } from '../../context/AuthContext'
+import { useDeletePost } from '../../hooks/useDeletePost'
 
 export const Route = createFileRoute('/Home/')({
   component: RouteComponent,
@@ -18,6 +19,7 @@ function RouteComponent() {
   const [showModal, setShowModal] = useState(false)
   const [postToEdit, setPostToEdit] = useState<Post | null>(null)
   const { isAdmin } = useAuth()
+  const deletePostMutation = useDeletePost()
 
   useEffect(() => {}, [isAdmin])
 
@@ -25,7 +27,8 @@ function RouteComponent() {
   if (error instanceof Error) return <p>Erro: {error.message}</p>
 
   function handleDeletePost(_id: string) {
-    console.log(`Deletar post com ID: ${_id}`)
+    deletePostMutation.mutate({ _id })
+    console.log('Post editado:', _id)
   }
 
   function handleEditedPost(postEdited: Post) {
