@@ -27,8 +27,12 @@ function RouteComponent() {
   if (error instanceof Error) return <p>Erro: {error.message}</p>
 
   function handleDeletePost(_id: string) {
-    deletePostMutation.mutate({ _id })
-    console.log('Post editado:', _id)
+    const confirmed = window.confirm(
+      'Tem certeza que deseja excluir esta publicação?',
+    )
+    if (confirmed) {
+      deletePostMutation.mutate({ _id })
+    }
   }
 
   function handleEditedPost(postEdited: Post) {
