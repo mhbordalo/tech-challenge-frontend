@@ -8,6 +8,7 @@ import { Post } from '../../types'
 import { FormPost } from '../../components/FormPost'
 import { useAuth } from '../../context/AuthContext'
 import { useDeletePost } from '../../hooks/useDeletePost'
+import Pagination from '../../components/Pagination'
 
 export const Route = createFileRoute('/Home/')({
   component: RouteComponent,
@@ -20,11 +21,17 @@ function RouteComponent() {
   const [postToEdit, setPostToEdit] = useState<Post | null>(null)
   const { isAdmin } = useAuth()
   const deletePostMutation = useDeletePost()
+  const [currentPage, setCurrentPage] = useState(1)
+  const totalPages = 10
 
   useEffect(() => {}, [isAdmin])
 
   if (isLoading) return <p>Carregando...</p>
   if (error instanceof Error) return <p>Erro: {error.message}</p>
+
+  function handlePageChange(page: number) {
+    setCurrentPage(page)
+  }
 
   function handleDeletePost(_id: string) {
     deletePostMutation.mutate({ _id })
@@ -98,6 +105,13 @@ function RouteComponent() {
         ) : (
           <p className="text-gray-500">Nenhum post encontrado.</p>
         )}
+      </div>
+      <div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
     </>
   )
