@@ -27,17 +27,17 @@ export function FormPost({ postToEdit, handleEditedPostList }: FormPostProp) {
     console.log(image)
     let newImage;
     if (image === null) {
-      newImage = postToEdit.image;
+      newImage = postToEdit.img;
     } else {
       newImage = image
     }
 
     const newPost = {
-      id: postToEdit.id,
-      name: postToEdit.name,
+      _id: postToEdit._id,
+      author: postToEdit.author,
       title: titleEdited,
       content: contentEdited,
-      image: newImage
+      img: newImage
     }
     handleEditedPostList(newPost)
   }

@@ -81,7 +81,7 @@ export function Header() {
 
             {!isLoggedIn ? (
               <Link
-                href="/login"
+                href="/Login"
                 className="flex gap-2 text-sm py-2 px-3 text-green-dark hover:text-gray-500 rounded md:bg-transparent md:p-0 items-center"
               >
                 <img src={login} alt="Login" className="w-4.1 h-5" />
@@ -89,7 +89,7 @@ export function Header() {
               </Link>
             ) : (
               <Link
-                href="/logout"
+                href="/Logout"
                 className="flex gap-2 text-sm py-2 px-3 text-green-dark hover:text-gray-500 rounded md:bg-transparent md:p-0 items-center"
               >
                 <img src={logout} alt="Logout" className="w-4.1 h-5" />
