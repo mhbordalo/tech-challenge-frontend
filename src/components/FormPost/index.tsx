@@ -52,7 +52,9 @@ export function FormPost({ postToEdit, handleEditedPostList }: FormPostProp) {
           <label
             htmlFor="title"
             className="block text-sm text-black font-semibold mb-2"
-          ></label>
+          >
+            Título
+          </label>
           <input
             type="text"
             name="title"

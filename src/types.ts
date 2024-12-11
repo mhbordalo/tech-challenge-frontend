@@ -1,5 +1,5 @@
 export type Post = {
-  _id: string
+  _id?: string
   author: string
   title: string
   content: string
