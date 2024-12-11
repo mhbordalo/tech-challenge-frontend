@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import logoHorinzontal from '/assets/images/logo_horizontal.png'
 import { useAuth } from '../../context/AuthContext'
@@ -6,14 +6,44 @@ import newPost from '/assets/icons/edit_document.png'
 import adminPanel from '/assets/icons/admin_panel_settings.png'
 import login from '/assets/icons/login.png'
 import logoutimg from '/assets/icons/logoutimg.png'
+import { ModalForm } from '../ModalForm'
+import { FormPost } from '../FormPost'
+import { CreatePost } from '../../types'
+import { useCreatePost } from '../../hooks/useCreatePost'
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { isLoggedIn, isAdmin, logout } = useAuth()
+  const [showModal, setShowModal] = useState(false)
+  const [postToEdit, setPostToEdit] = useState<CreatePost>({
+    title: '',
+    content: '',
+    img: '',
+  })
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
+
+  const toggleModalForm = () => {
+    setShowModal(true)
+  }
+
+  const createPostMutation = useCreatePost(postToEdit)
+  async function handleCreatePost(newPost: CreatePost) {
+    setPostToEdit(newPost)
+  }
+
+  useEffect(() => {
+    if (postToEdit.title !== '') {
+      createPostMutation.mutate()
+      setPostToEdit({
+        title: '',
+        content: '',
+        img: '',
+      })
+    }
+  }, [postToEdit])
 
   return (
     <nav className="bg-white border-b border-gray-100">
@@ -55,9 +85,11 @@ export function Header() {
         >
           <ul className="font-medium flex flex-col p-4 md:p-0 md:flex-row md:space-x-8">
             {isAdmin && (
-              <Link
-                href="/home"
-                className="flex gap-2 text-sm py-2 px-3 text-green-dark hover:text-gray-500 rounded md:bg-transparent md:p-0 items-center"
+              // <Link
+              //   href="/home"
+              <div
+                className="flex gap-2 text-sm py-2 px-3 text-green-dark hover:text-gray-500 rounded md:bg-transparent md:p-0 items-center hover:cursor-pointer"
+                onClick={toggleModalForm}
               >
                 <img
                   src={newPost}
@@ -65,7 +97,8 @@ export function Header() {
                   className="w-4.1 h-5"
                 />
                 Criar Publicação
-              </Link>
+                {/* </Link> */}
+              </div>
             )}
 
             {isAdmin && (
@@ -103,6 +136,9 @@ export function Header() {
           </ul>
         </div>
       </div>
+      <ModalForm isVisible={showModal} onClose={() => setShowModal(false)}>
+        <FormPost postToEdit={postToEdit} handleCreatePost={handleCreatePost} />
+      </ModalForm>
     </nav>
   )
 }

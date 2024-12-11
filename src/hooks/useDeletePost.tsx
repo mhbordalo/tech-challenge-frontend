@@ -27,6 +27,7 @@ export function useDeletePost() {
       )
     },
     onSuccess: () => {
+      console.log('deletou')
       queryClient.invalidateQueries(['posts'])
     },
   })

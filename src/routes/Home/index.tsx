@@ -3,7 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Card } from '../../components/Card'
 import { Intro } from '../../components/Intro'
 import { ModalForm } from '../../components/ModalForm'
-import { Post } from '../../types'
+import {  EditPost, Post } from '../../types'
 import { FormPost } from '../../components/FormPost'
 import { useAuth } from '../../context/AuthContext'
 import { useDeletePost } from '../../hooks/useDeletePost'
@@ -23,6 +23,7 @@ function RouteComponent() {
   const [currentPage, setCurrentPage] = useState(1) // Estado inicial da página
   const { data, isLoading, error } = usePostsPagination(currentPage)
 
+
   useEffect(() => {}, [isAdmin])
 
   if (isLoading) return <p>Carregando...</p>
@@ -41,13 +42,14 @@ function RouteComponent() {
     }
   }
 
-  function handleEditedPost(postEdited: Post) {
-    console.log('Post editado:', postEdited)
+  function handleEditedPost(editPost:EditPost): void {
+    console.log('Post editado:', editPost)
   }
 
   const filteredPosts = data?.posts?.filter((post: Post) =>
     post.title.toLowerCase().includes(searchTerm.toLowerCase()),
   )
+
 
   return (
     <>
@@ -95,6 +97,7 @@ function RouteComponent() {
 
       <div className="max-w-screen-xl mx-auto py-10 flex flex-wrap justify-center">
         {filteredPosts?.length ? (
+          
           filteredPosts.map((post: Post) => (
             <Card
               key={post._id}
@@ -107,12 +110,13 @@ function RouteComponent() {
           ))
         ) : (
           <p className="text-gray-500">Nenhum post encontrado.</p>
-        )}
+        )
+      }
       </div>
       <div>
         <Pagination
           currentPage={currentPage}
-          totalPages={data?.totalPages || 1}
+          totalPages={Math.round((data?.totalPages)/6) || 1}
           onPageChange={handlePageChange}
         />
       </div>

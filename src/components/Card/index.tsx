@@ -19,12 +19,15 @@ export function Card({
 }: CardProps) {
   const { _id, author, title, content, img } = post
 
+
+
   function handleClickButtonEdit() {
     setPostToEdit?.(post)
     setShowModal?.(true)
   }
 
   function handleClickButtonDelete() {
+    if(post._id !== undefined)
     handleDeletePost?.(post._id)
   }
 
