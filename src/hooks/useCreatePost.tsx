@@ -4,41 +4,44 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import axios from 'axios'
-//import { useAuth } from '../context/AuthContext'
 import { CreatePost } from '../types'
 
-export function useCreatePost({
-  title = '',
-  content = '',
-  img = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNxqHVvjehI51bq2YwrC5iElwO7FcWlZGWiQ&s',
-}: CreatePost): UseMutationResult<void, Error, void, unknown> {
+export function useCreatePost(): UseMutationResult<
+  void,
+  Error,
+  CreatePost,
+  unknown
+> {
   const queryClient = useQueryClient()
-  //const { isLoggedIn } = useAuth()
 
-  const mutation = useMutation<void, Error>({
-    mutationFn: async () => {
+  const mutation = useMutation<void, Error, CreatePost>({
+    mutationFn: async ({ title, content, img }) => {
       const token = localStorage.getItem('token')
-      console.log(1)
       if (!token) {
         throw new Error('Token not found')
       }
-      console.log(title)
+
+      const formData = new FormData()
+      formData.append('title', title)
+      formData.append('content', content)
+      if (img instanceof File) {
+        formData.append('img', img)
+      } else {
+        formData.append('img', img)
+      }
+
       await axios.post(
         `https://tech-challenge-back-end.vercel.app/posts/`,
-        {
-          title,
-          content,
-          img,
-        },
+        formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
           },
         },
       )
     },
     onSuccess: () => {
-      console.log(2)
       queryClient.invalidateQueries(['posts'])
     },
   })

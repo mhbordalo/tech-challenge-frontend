@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Button } from '../Button'
 import { CreatePost, EditPost } from '../../types'
+import { useCreatePost } from '../../hooks/useCreatePost'
 
 interface FormPostProp {
   postToEdit: EditPost
@@ -13,11 +14,11 @@ export function FormPost({
   handleEditedPostList,
   handleCreatePost,
 }: FormPostProp) {
-  //const [post, setPost] = useState(postToEdit)
   const [titleEdited, setTitleEdited] = useState(postToEdit.title)
   const [contentEdited, setContentEdited] = useState(postToEdit.content)
   const [image, setImage] = useState<File | null | string>(null)
   const [preview, setPreview] = useState<string | null>(null)
+  const createPostMutation = useCreatePost()
 
   function handleChangeFile(e: React.ChangeEvent<HTMLInputElement>): void {
     const file = e.target.files?.[0]
@@ -53,7 +54,7 @@ export function FormPost({
         content: contentEdited,
         img: newImage,
       }
-      handleCreatePost(newPost)
+      createPostMutation.mutate(newPost)
     }
   }
 
