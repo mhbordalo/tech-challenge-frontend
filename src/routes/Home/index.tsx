@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { usePosts } from '../../hooks/usePosts'
 import { Card } from '../../components/Card'
 import { Intro } from '../../components/Intro'
 import { ModalForm } from '../../components/ModalForm'
@@ -9,20 +8,20 @@ import { FormPost } from '../../components/FormPost'
 import { useAuth } from '../../context/AuthContext'
 import { useDeletePost } from '../../hooks/useDeletePost'
 import Pagination from '../../components/Pagination'
+import { usePostsPagination } from '../../hooks/usePostsPagination'
 
 export const Route = createFileRoute('/Home/')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { data: posts, isLoading, error } = usePosts()
   const [searchTerm, setSearchTerm] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [postToEdit, setPostToEdit] = useState<Post | null>(null)
   const { isAdmin } = useAuth()
   const deletePostMutation = useDeletePost()
-  const [currentPage, setCurrentPage] = useState(1)
-  const totalPages = 10
+  const [currentPage, setCurrentPage] = useState(1) // Estado inicial da página
+  const { data, isLoading, error } = usePostsPagination(currentPage)
 
   useEffect(() => {}, [isAdmin])
 
@@ -46,7 +45,7 @@ function RouteComponent() {
     console.log('Post editado:', postEdited)
   }
 
-  const filteredPosts = posts?.filter((post: Post) =>
+  const filteredPosts = data?.posts?.filter((post: Post) =>
     post.title.toLowerCase().includes(searchTerm.toLowerCase()),
   )
 
@@ -113,7 +112,7 @@ function RouteComponent() {
       <div>
         <Pagination
           currentPage={currentPage}
-          totalPages={totalPages}
+          totalPages={data?.totalPages || 1}
           onPageChange={handlePageChange}
         />
       </div>
