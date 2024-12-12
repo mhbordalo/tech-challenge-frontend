@@ -40,7 +40,7 @@ export function FormPost({
 
     if (handleEditedPostList) {
       const newPost = {
-        id: postToEdit._id,
+        _id: postToEdit._id,
         title: titleEdited,
         content: contentEdited,
         img: newImage,
@@ -54,6 +54,7 @@ export function FormPost({
         content: contentEdited,
         img: newImage,
       }
+
       createPostMutation.mutate(newPost)
     }
   }

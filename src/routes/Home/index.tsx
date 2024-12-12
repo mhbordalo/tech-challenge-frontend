@@ -9,6 +9,7 @@ import { useAuth } from '../../context/AuthContext'
 import { useDeletePost } from '../../hooks/useDeletePost'
 import Pagination from '../../components/Pagination'
 import { usePostsPagination } from '../../hooks/usePostsPagination'
+import { useEditPost } from '../../hooks/userEditPost'
 
 export const Route = createFileRoute('/Home/')({
   component: RouteComponent,
@@ -20,6 +21,7 @@ function RouteComponent() {
   const [postToEdit, setPostToEdit] = useState<Post | null>(null)
   const { isAdmin } = useAuth()
   const deletePostMutation = useDeletePost()
+  const { mutate: editPosts } = useEditPost()
   const [currentPage, setCurrentPage] = useState(1) // Estado inicial da página
   const { data, isLoading, error } = usePostsPagination(currentPage)
 
@@ -42,7 +44,18 @@ function RouteComponent() {
   }
 
   function handleEditedPost(editPost: EditPost): void {
-    console.log('Post editado:', editPost)
+    //console.log('Post editado:', editPost)
+    const { _id, title, content, img } = editPost
+    if (_id) {
+      const postData: EditPost = {
+        _id,
+        title,
+        content,
+        img,
+      }
+      editPosts(postData);
+      //console.log(editPost)
+    }
   }
 
   const filteredPosts = data?.posts?.filter((post: Post) =>
