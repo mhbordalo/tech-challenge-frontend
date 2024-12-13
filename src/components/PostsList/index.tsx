@@ -1,9 +1,10 @@
-import { Dispatch, SetStateAction } from 'react';
-import { useCurrentPage } from '../../context/CurrentPage';
-import { usePostsPagination } from '../../hooks/usePostsPagination';
-import { Card } from '../../components/Card';
-import Pagination from '../../components/Pagination';
-import { Post } from '../../types';
+import { Dispatch, SetStateAction } from 'react'
+import { useCurrentPage } from '../../context/CurrentPage'
+import { usePostsPagination } from '../../hooks/usePostsPagination'
+import { Card } from '../../components/Card'
+import Pagination from '../../components/Pagination'
+import { Post } from '../../types'
+import { Link } from '@tanstack/react-router'
 
 export function PostsList({
   searchTerm,
@@ -11,20 +12,20 @@ export function PostsList({
   setPostToEdit,
   setShowModal,
 }: {
-  searchTerm: string;
-  isAdmin: boolean;
-  setPostToEdit: Dispatch<SetStateAction<Post | null>>;
-  setShowModal: Dispatch<SetStateAction<boolean>>;
+  searchTerm: string
+  isAdmin: boolean
+  setPostToEdit: Dispatch<SetStateAction<Post | null>>
+  setShowModal: Dispatch<SetStateAction<boolean>>
 }) {
-  const { currentPage, setCurrentPage } = useCurrentPage();
-  const { data, isLoading, isPreviousData } = usePostsPagination(currentPage);
+  const { currentPage, setCurrentPage } = useCurrentPage()
+  const { data, isLoading, isPreviousData } = usePostsPagination(currentPage)
 
   const filteredPosts = data?.posts?.filter((post) =>
-    post.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    post.title.toLowerCase().includes(searchTerm.toLowerCase()),
+  )
 
-  const isLoadingInitialData = isLoading && !data; 
-  
+  const isLoadingInitialData = isLoading && !data
+
   return (
     <>
       <div
@@ -36,14 +37,16 @@ export function PostsList({
           <p className="text-gray-500 mt-4">Carregando posts...</p>
         ) : filteredPosts?.length ? (
           filteredPosts.map((post) => (
-            <Card
-              key={post._id}
-              post={post}
-              admin={isAdmin}
-              setPostToEdit={setPostToEdit}
-              setShowModal={setShowModal}
-              handleDeletePost={(id) => console.log('Deletando post:', id)}
-            />
+            <Link to={`/Details/${post._id}`} key={post._id}>
+              <Card
+                key={post._id}
+                post={post}
+                admin={isAdmin}
+                setPostToEdit={setPostToEdit}
+                setShowModal={setShowModal}
+                handleDeletePost={(id) => console.log('Deletando post:', id)}
+              />
+            </Link>
           ))
         ) : (
           <p className="text-gray-500">Nenhum post encontrado.</p>
@@ -60,5 +63,5 @@ export function PostsList({
         onPageChange={(page) => setCurrentPage(page)}
       />
     </>
-  );
+  )
 }

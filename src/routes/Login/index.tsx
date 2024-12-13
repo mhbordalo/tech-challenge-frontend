@@ -21,7 +21,7 @@ function RouteComponent() {
       { email, password },
       {
         onSuccess: () => {
-          navigate({ to: '/home/' })
+          navigate({ to: '/Home' })
         },
       },
     )
