@@ -1,49 +1,22 @@
-import { useEffect, useState } from 'react'
-import { Link } from '@tanstack/react-router'
-import logoHorinzontal from '/assets/images/logo_horizontal.png'
-import { useAuth } from '../../context/AuthContext'
-import newPost from '/assets/icons/edit_document.png'
-import adminPanel from '/assets/icons/admin_panel_settings.png'
-import login from '/assets/icons/login.png'
-import logoutimg from '/assets/icons/logoutimg.png'
-import { ModalForm } from '../ModalForm'
-import { FormPost } from '../FormPost'
-import { CreatePost } from '../../types'
-import { useCreatePost } from '../../hooks/useCreatePost'
+import { useState } from "react";
+import { Link } from "@tanstack/react-router";
+import logoHorinzontal from "/assets/images/logo_horizontal.png";
+import { useAuth } from "../../context/AuthContext";
+import newPost from "/assets/icons/edit_document.png";
+import login from "/assets/icons/login.png";
+import logoutimg from "/assets/icons/logoutimg.png";
+import { ModalForm } from "../ModalForm";
+import { FormPost } from "../FormPost";
 
 export function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { isLoggedIn, isAdmin, logout } = useAuth()
-  const [showModal, setShowModal] = useState(false)
-  const [postToEdit, setPostToEdit] = useState<CreatePost>({
-    title: '',
-    content: '',
-    img: '',
-  })
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isLoggedIn, isAdmin, logout } = useAuth();
+  const [showModal, setShowModal] = useState(false);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
+  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
-  const toggleModalForm = () => {
-    setShowModal(true)
-  }
-
-  const createPostMutation = useCreatePost(postToEdit)
-  async function handleCreatePost(newPost: CreatePost) {
-    setPostToEdit(newPost)
-  }
-
-  useEffect(() => {
-    if (postToEdit.title !== '') {
-      createPostMutation.mutate()
-      setPostToEdit({
-        title: '',
-        content: '',
-        img: '',
-      })
-    }
-  }, [postToEdit])
+  const handleOpenModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
 
   return (
     <nav className="bg-white border-b border-gray-100">
@@ -80,39 +53,20 @@ export function Header() {
         </button>
 
         <div
-          className={`${isMenuOpen ? 'block' : 'hidden'} w-full md:block md:w-auto`}
+          className={`${
+            isMenuOpen ? "block" : "hidden"
+          } w-full md:block md:w-auto`}
           id="navbar-default"
         >
           <ul className="font-medium flex flex-col p-4 md:p-0 md:flex-row md:space-x-8">
             {isAdmin && (
-              // <Link
-              //   href="/home"
               <div
                 className="flex gap-2 text-sm py-2 px-3 text-green-dark hover:text-gray-500 rounded md:bg-transparent md:p-0 items-center hover:cursor-pointer"
-                onClick={toggleModalForm}
+                onClick={handleOpenModal}
               >
-                <img
-                  src={newPost}
-                  alt="Criar Publicação"
-                  className="w-4.1 h-5"
-                />
+                <img src={newPost} alt="Criar Publicação" className="w-4.1 h-5" />
                 Criar Publicação
-                {/* </Link> */}
               </div>
-            )}
-
-            {isAdmin && (
-              <Link
-                href="/home"
-                className="flex gap-2 text-sm py-2 px-3 text-green-dark hover:text-gray-500 rounded md:bg-transparent md:p-0 items-center"
-              >
-                <img
-                  src={adminPanel}
-                  alt="Área Administrativa"
-                  className="w-4.1 h-5"
-                />
-                Área Administrativa
-              </Link>
             )}
 
             {!isLoggedIn ? (
@@ -136,9 +90,10 @@ export function Header() {
           </ul>
         </div>
       </div>
-      <ModalForm isVisible={showModal} onClose={() => setShowModal(false)}>
-        <FormPost postToEdit={postToEdit} handleCreatePost={handleCreatePost} />
+
+      <ModalForm isVisible={showModal} onClose={handleCloseModal}>
+        <FormPost handleCloseModal={handleCloseModal} />
       </ModalForm>
     </nav>
-  )
+  );
 }
