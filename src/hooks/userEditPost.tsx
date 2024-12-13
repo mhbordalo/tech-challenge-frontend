@@ -4,18 +4,18 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import axios from 'axios'
-import { CreatePost } from '../types'
+import { EditPost } from '../types'
 
-export function useCreatePost(): UseMutationResult<
+export function useEditPost(): UseMutationResult<
   void,
   Error,
-  CreatePost,
+  EditPost,
   unknown
 > {
   const queryClient = useQueryClient()
 
-  const mutation = useMutation<void, Error, CreatePost>({
-    mutationFn: async ({ title, content, img }) => {
+  const mutation = useMutation<void, Error, EditPost>({
+    mutationFn: async ({ _id, title, content, img }) => {
       const token = localStorage.getItem('token')
       if (!token) {
         throw new Error('Token not found')
@@ -29,10 +29,16 @@ export function useCreatePost(): UseMutationResult<
       } else {
         formData.append('img', img)
       }
-      console.log(formData)
+    //   console.log(formData)
 
-      await axios.post(
-        `https://tech-challenge-back-end.vercel.app/posts/`,
+    //   console.log(_id)
+    //   console.log(title)
+    //   console.log(content)
+    //   console.log(img)
+      formData.forEach((value, key) => { console.log(`${typeof(key)}: ${typeof(value)}`); });
+
+      const teste = await axios.patch(
+        `https://tech-challenge-back-end.vercel.app/posts/${_id}`,
         formData,
         {
           headers: {
@@ -41,6 +47,7 @@ export function useCreatePost(): UseMutationResult<
           },
         },
       )
+      //console.log('teste',teste.status.toString)
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['posts'])
