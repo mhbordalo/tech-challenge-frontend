@@ -1,3 +1,4 @@
+import Loader from '../../components/Loader'
 import { Intro } from '../../components/Intro'
 import { Post } from '@/types'
 import { createFileRoute } from '@tanstack/react-router'
@@ -11,7 +12,7 @@ export const Route = createFileRoute('/Details/$postId')({
       postId: params.postId,
     }
   },
-  pendingComponent: () => <div>Loading...</div>,
+  pendingComponent: () => <Loader />,
   errorComponent: () => <div>Post não encontrado!</div>,
 })
 
@@ -40,13 +41,7 @@ function PostDetail() {
     <div>
       <Intro title={post?.title} description={post?.author} />
       <p className="text-center w-[65.8%] mt-16 mb-11 mx-auto">
-        {post?.content} Lorem ipsum dolor sit, amet consectetur adipisicing
-        elit. Ut voluptatem ab incidunt reiciendis aut facilis consequatur
-        dolores hic voluptates, id quos, qui, distinctio aperiam harum tenetur
-        rerum delectus aliquam modi Lorem ipsum dolor sit amet consectetur
-        adipisicing elit. Ea fugiat ipsa minus doloremque asperiores repellat ut
-        laboriosam, molestiae sapiente exercitationem sunt delectus, deleniti
-        itaque, eligendi corporis recusandae? Ab, veritatis necessitatibus?!
+        {post?.content}
       </p>
       <img src={post?.img} className="justify-self-center max-w-[43%] mb-14" />
     </div>

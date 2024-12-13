@@ -5,6 +5,7 @@ import { Card } from '../../components/Card'
 import Pagination from '../../components/Pagination'
 import { Post } from '../../types'
 import { Link } from '@tanstack/react-router'
+import Loader from '../Loader'
 
 export function PostsList({
   searchTerm,
@@ -34,7 +35,7 @@ export function PostsList({
         } transition-opacity duration-300`}
       >
         {isLoadingInitialData ? (
-          <p className="text-gray-500 mt-4">Carregando posts...</p>
+          <Loader />
         ) : filteredPosts?.length ? (
           filteredPosts.map((post) => (
             <Link to={`/Details/${post._id}`} key={post._id}>
