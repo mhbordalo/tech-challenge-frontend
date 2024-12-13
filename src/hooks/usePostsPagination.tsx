@@ -1,32 +1,39 @@
-import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
-
-interface Post {
-  _id: string
-  title: string
-  content: string
-  img: string
-  author: string
-  // Adicione outros campos conforme necessário
-}
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Post } from '../types';
 
 interface PostsResponse {
-  posts: Post[]
-  totalPages: number
-}
-
-async function fetchPosts(page: number): Promise<PostsResponse> {
-  const response = await axios.get(
-    `https://tech-challenge-back-end.vercel.app/posts/pagination?page=${page}`,
-  )
-  return response.data
+  posts: Post[];
+  totalPages: number;
 }
 
 export function usePostsPagination(page: number) {
-  return useQuery<PostsResponse, Error>({
-    queryKey: ['posts', page],
-    queryFn: () => fetchPosts(page),
-    staleTime: 5000, // Mantém os dados anteriores por 5 segundos
-    keepPreviousData: true, // Mantém os dados anteriores enquanto novos dados estão sendo carregados
-  })
+  const [data, setData] = useState<PostsResponse | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
+  const [isPreviousData, setIsPreviousData] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setIsLoading(true);
+      setIsPreviousData(!!data); 
+      setError(null);
+
+      try {
+        const response = await axios.get<PostsResponse>(
+          `https://tech-challenge-back-end.vercel.app/posts/pagination?page=${page}`
+        );
+        setData(response.data);
+      } catch (err) {
+        setError(err as Error);
+      } finally {
+        setIsLoading(false);
+        setIsPreviousData(false); 
+      }
+    };
+
+    fetchPosts();
+  }, [page]);
+
+  return { data, isLoading, error, isPreviousData };
 }
