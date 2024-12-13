@@ -3,16 +3,17 @@ import { routeTree } from "./routeTree.gen";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ModalForm } from "./components/ModalForm";
+import { AuthProvider } from './context/AuthContext'
 
 const router = createRouter({ routeTree });
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface Register {
-    router: typeof router;
+    router: typeof router
   }
 }
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient()
 
 // context type
 interface ModalContextType {
@@ -39,13 +40,16 @@ export default function App() {
   };
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ModalContext.Provider value={{ handleOpenModal }}>
-        <RouterProvider router={router} />
-        <ModalForm isVisible={showModal} onClose={handleCloseModal}>
-          {modalContent}
-        </ModalForm>
-      </ModalContext.Provider>
-    </QueryClientProvider>
-  );
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <ModalContext.Provider value={{ handleOpenModal }}>
+          <RouterProvider router={router} />
+          <ModalForm isVisible={showModal} onClose={handleCloseModal}>
+            {modalContent}
+          </ModalForm>
+        </ModalContext.Provider>
+      </QueryClientProvider>
+    </AuthProvider>
+  )
 }
+

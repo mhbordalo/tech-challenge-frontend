@@ -5,3 +5,16 @@ export type Post = {
   content: string
   img: string | File | null
 }
+
+export type EditPost = {
+  _id?: string
+  title: string
+  content: string
+  img: string | File | null
+}
+
+export type CreatePost = {
+  title: string
+  content: string
+  img: string | File | null
+}

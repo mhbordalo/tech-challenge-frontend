@@ -1,18 +1,24 @@
 import { useState } from 'react'
 import { Button } from '../Button'
-import { Post } from '../../types'
+import { CreatePost, EditPost } from '../../types'
+import { useCreatePost } from '../../hooks/useCreatePost'
 
 interface FormPostProp {
-  postToEdit: Post
-  handleEditedPostList: (post: Post) => void
+  postToEdit: EditPost
+  handleEditedPostList?: (post: EditPost) => void
+  handleCreatePost?: (post: CreatePost) => void
 }
 
-export function FormPost({ postToEdit, handleEditedPostList }: FormPostProp) {
-  //const [post, setPost] = useState(postToEdit)
+export function FormPost({
+  postToEdit,
+  handleEditedPostList,
+  handleCreatePost,
+}: FormPostProp) {
   const [titleEdited, setTitleEdited] = useState(postToEdit.title)
   const [contentEdited, setContentEdited] = useState(postToEdit.content)
   const [image, setImage] = useState<File | null | string>(null)
   const [preview, setPreview] = useState<string | null>(null)
+  const createPostMutation = useCreatePost()
 
   function handleChangeFile(e: React.ChangeEvent<HTMLInputElement>): void {
     const file = e.target.files?.[0]
@@ -24,22 +30,32 @@ export function FormPost({ postToEdit, handleEditedPostList }: FormPostProp) {
 
   function handleSubmit(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault()
-    console.log(image)
-    let newImage;
+
+    let newImage
     if (image === null) {
-      newImage = postToEdit.image;
+      newImage = postToEdit.img
     } else {
       newImage = image
     }
 
-    const newPost = {
-      id: postToEdit.id,
-      name: postToEdit.name,
-      title: titleEdited,
-      content: contentEdited,
-      image: newImage
+    if (handleEditedPostList) {
+      const newPost = {
+        id: postToEdit._id,
+        title: titleEdited,
+        content: contentEdited,
+        img: newImage,
+      }
+      handleEditedPostList(newPost)
     }
-    handleEditedPostList(newPost)
+
+    if (handleCreatePost) {
+      const newPost = {
+        title: titleEdited,
+        content: contentEdited,
+        img: newImage,
+      }
+      createPostMutation.mutate(newPost)
+    }
   }
 
   return (
@@ -47,7 +63,7 @@ export function FormPost({ postToEdit, handleEditedPostList }: FormPostProp) {
       <h2 className="text-base text-black font-semibold mb-4">
         Nova Publicação
       </h2>
-      <form >
+      <form>
         <div className="mb-4">
           <label
             htmlFor="title"
@@ -90,7 +106,7 @@ export function FormPost({ postToEdit, handleEditedPostList }: FormPostProp) {
             className="w-full border rounded-lg text-gray-700 text-xs bg-gray-200 file:bg-black-light file: font-normal file:text-white file:text-xs file:me-4 file:py-2 file:px-4 file:w-48 file:hover:bg-grey-dark file:transition file:cursor-pointer"
           />
           {preview && (
-            <div className=' flex justify-center'>
+            <div className=" flex justify-center">
               <img
                 src={preview}
                 alt="Preview"
@@ -99,7 +115,12 @@ export function FormPost({ postToEdit, handleEditedPostList }: FormPostProp) {
             </div>
           )}
         </div>
-        <Button size="lg" onClick={handleSubmit} className="w-full" id="wrapper">
+        <Button
+          size="lg"
+          onClick={handleSubmit}
+          className="w-full"
+          id="wrapper"
+        >
           PUBLICAR
         </Button>
       </form>

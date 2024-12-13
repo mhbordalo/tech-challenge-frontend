@@ -1,40 +1,51 @@
 import { useEffect, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { usePosts } from '../../hooks/usePosts'
 import { Card } from '../../components/Card'
 import { Intro } from '../../components/Intro'
 import { ModalForm } from '../../components/ModalForm'
-import { Post } from '../../types'
+import { EditPost, Post } from '../../types'
 import { FormPost } from '../../components/FormPost'
+import { useAuth } from '../../context/AuthContext'
+import { useDeletePost } from '../../hooks/useDeletePost'
+import Pagination from '../../components/Pagination'
+import { usePostsPagination } from '../../hooks/usePostsPagination'
 
 export const Route = createFileRoute('/Home/')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { data: posts, isLoading, error } = usePosts()
   const [searchTerm, setSearchTerm] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [postToEdit, setPostToEdit] = useState<Post | null>(null)
-  const [admin, setAdmin] = useState<boolean>(false)
+  const { isAdmin } = useAuth()
+  const deletePostMutation = useDeletePost()
+  const [currentPage, setCurrentPage] = useState(1) // Estado inicial da página
+  const { data, isLoading, error } = usePostsPagination(currentPage)
 
-  useEffect(() => {
-    const userIsAdmin = true
-    setAdmin(userIsAdmin)
-  }, [])
+  useEffect(() => {}, [isAdmin])
 
   if (isLoading) return <p>Carregando...</p>
   if (error instanceof Error) return <p>Erro: {error.message}</p>
 
+  function handlePageChange(page: number) {
+    setCurrentPage(page)
+  }
+
   function handleDeletePost(_id: string) {
-    console.log(`Deletar post com ID: ${_id}`)
+    const confirmed = window.confirm(
+      'Tem certeza que deseja excluir esta publicação?',
+    )
+    if (confirmed) {
+      deletePostMutation.mutate({ _id })
+    }
   }
 
-  function handleEditedPost(postEdited: Post) {
-    console.log('Post editado:', postEdited)
+  function handleEditedPost(editPost: EditPost): void {
+    console.log('Post editado:', editPost)
   }
 
-  const filteredPosts = posts?.filter((post: Post) =>
+  const filteredPosts = data?.posts?.filter((post: Post) =>
     post.title.toLowerCase().includes(searchTerm.toLowerCase()),
   )
 
@@ -88,7 +99,7 @@ function RouteComponent() {
             <Card
               key={post._id}
               post={post}
-              admin={admin}
+              admin={isAdmin}
               setPostToEdit={setPostToEdit}
               setShowModal={setShowModal}
               handleDeletePost={handleDeletePost}
@@ -97,6 +108,13 @@ function RouteComponent() {
         ) : (
           <p className="text-gray-500">Nenhum post encontrado.</p>
         )}
+      </div>
+      <div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={data?.totalPages || 1}
+          onPageChange={handlePageChange}
+        />
       </div>
     </>
   )
