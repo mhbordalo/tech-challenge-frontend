@@ -4,7 +4,6 @@ import { usePostsPagination } from '../../hooks/usePostsPagination'
 import { Card } from '../../components/Card'
 import Pagination from '../../components/Pagination'
 import { Post } from '../../types'
-import { Link } from '@tanstack/react-router'
 import Loader from '../Loader'
 
 export function PostsList({
@@ -38,16 +37,14 @@ export function PostsList({
           <Loader />
         ) : filteredPosts?.length ? (
           filteredPosts.map((post) => (
-            <Link to={`/Details/${post._id}`} key={post._id}>
-              <Card
-                key={post._id}
-                post={post}
-                admin={isAdmin}
-                setPostToEdit={setPostToEdit}
-                setShowModal={setShowModal}
-                handleDeletePost={(id) => console.log('Deletando post:', id)}
-              />
-            </Link>
+            <Card
+              key={post._id}
+              post={post}
+              admin={isAdmin}
+              setPostToEdit={setPostToEdit}
+              setShowModal={setShowModal}
+              handleDeletePost={(id) => console.log('Deletando post:', id)}
+            />
           ))
         ) : (
           <p className="text-gray-500">Nenhum post encontrado.</p>

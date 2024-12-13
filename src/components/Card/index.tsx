@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { Post } from '../../types'
 import { Button } from '../Button'
 import imageNotAvailable from '/assets/images/image_not_available.png'
@@ -25,13 +26,18 @@ export function Card({
   }
 
   function handleClickButtonDelete() {
-    if(post._id !== undefined)
-    handleDeletePost?.(post._id)
+    if (post._id !== undefined) handleDeletePost?.(post._id)
   }
 
   const renderImage = () => {
     if (typeof img === 'string') {
-      return <img className="w-full h-44 object-cover" src={img} alt={`Imagem ${title}`} />
+      return (
+        <img
+          className="w-full h-44 object-cover"
+          src={img}
+          alt={`Imagem ${title}`}
+        />
+      )
     } else if (img instanceof File) {
       return (
         <img
@@ -53,16 +59,18 @@ export function Card({
 
   return (
     <div className="w-96 h-96 rounded overflow-hidden shadow-lg m-2 relative mb-5">
-      {renderImage()}
-      <div className="px-6">
-        <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs text-gray-700 mr-2 mt-3">
-          {author}
-        </span>
-        <div className="font-bold text-xl pt-2 pb-1">{title}</div>
-        <p className="text-black text-base leading-none line-clamp-3 pb-5">
-          {content}
-        </p>
-      </div>
+      <Link to={`/Details/${post._id}`} key={post._id}>
+        {renderImage()}
+        <div className="px-6">
+          <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs text-gray-700 mr-2 mt-3">
+            {author}
+          </span>
+          <div className="font-bold text-xl pt-2 pb-1">{title}</div>
+          <p className="text-black text-base leading-none line-clamp-3 pb-5">
+            {content}
+          </p>
+        </div>
+      </Link>
 
       {admin ? (
         <div className="px-6 pt-4 pb-2 flex justify-between">
@@ -85,14 +93,16 @@ export function Card({
         </div>
       ) : (
         <div className="absolute bottom-3 w-full px-6 pt-4 pb-2">
-          <Button
-            className="w-full"
-            size="lg"
-            variant="primary"
-            onClick={() => console.log('read ', _id)}
-          >
-            LER PUBLICAÇÃO
-          </Button>
+          <Link to={`/Details/${post._id}`} key={post._id}>
+            <Button
+              className="w-full"
+              size="lg"
+              variant="primary"
+              onClick={() => console.log('read ', _id)}
+            >
+              LER PUBLICAÇÃO
+            </Button>
+          </Link>
         </div>
       )}
     </div>
