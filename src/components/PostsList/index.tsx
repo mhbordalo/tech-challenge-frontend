@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { useCurrentPage } from '../../context/CurrentPage'
 import { usePostsPagination } from '../../hooks/usePostsPagination'
 import { useDeletePost } from '../../hooks/useDeletePost'
@@ -6,6 +6,8 @@ import { Card } from '../../components/Card'
 import Pagination from '../../components/Pagination'
 import { Post } from '../../types'
 import Loader from '../Loader'
+import { Modal } from '../Modal'
+import { Button } from '../Button'
 
 export function PostsList({
   searchTerm,
@@ -22,6 +24,9 @@ export function PostsList({
   const { data, isLoading, isFetching, error } = usePostsPagination(currentPage)
   const { mutate: deletePostMutation, isLoading: isDeleting } = useDeletePost()
 
+  const [postIdToDelete, setPostIdToDelete] = useState<string | null>(null)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+
   const filteredPosts = data?.posts?.filter((post) =>
     post.title.toLowerCase().includes(searchTerm.toLowerCase()),
   )
@@ -29,11 +34,21 @@ export function PostsList({
   const isLoadingInitialData = isLoading && !data
 
   async function handleDeletePost(id: string) {
-    const confirmed = window.confirm(
-      'Tem certeza que deseja excluir este post?',
-    )
-    if (!confirmed) return
-    deletePostMutation({ _id: id })
+    setPostIdToDelete(id)
+    setIsDeleteModalOpen(true)
+  }
+
+  async function confirmDelete() {
+    if (postIdToDelete) {
+      deletePostMutation({ _id: postIdToDelete })
+      setPostIdToDelete(null)
+      setIsDeleteModalOpen(false)
+    }
+  }
+
+  function cancelDelete() {
+    setPostIdToDelete(null)
+    setIsDeleteModalOpen(false)
   }
 
   if (isLoadingInitialData) {
@@ -76,6 +91,20 @@ export function PostsList({
         totalPages={data?.totalPages || 1}
         onPageChange={(page) => setCurrentPage(page)}
       />
+
+      {isDeleteModalOpen && (
+        <Modal onClose={cancelDelete}>
+          <p className="mb-10">Tem certeza que deseja excluir este post?</p>
+          <div className="flex justify-end space-x-2">
+            <Button variant="primary" onClick={cancelDelete}>
+              Cancelar
+            </Button>
+            <Button variant="danger" onClick={confirmDelete}>
+              Excluir
+            </Button>
+          </div>
+        </Modal>
+      )}
     </>
   )
 }
