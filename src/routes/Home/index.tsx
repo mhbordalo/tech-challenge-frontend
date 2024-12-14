@@ -1,34 +1,25 @@
-import { useState } from 'react';
-import { createFileRoute } from '@tanstack/react-router';
-import { Intro } from '../../components/Intro';
-import { ModalForm } from '../../components/ModalForm';
-import { FormPost } from '../../components/FormPost';
-import { PostsList } from '../../components/PostsList';
-import { Post } from '../../types';
-import { useAuth } from '../../context/AuthContext';
-import { useEffect, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { usePosts } from '../../hooks/usePosts'
-import { Card } from '../../components/Card'
 import { Intro } from '../../components/Intro'
 import { ModalForm } from '../../components/ModalForm'
-import { Post } from '../../types'
 import { FormPost } from '../../components/FormPost'
+import { PostsList } from '../../components/PostsList'
+import { Post } from '../../types'
+import { useAuth } from '../../context/AuthContext'
+import { useEffect, useState } from 'react'
+import { usePosts } from '../../hooks/usePosts'
+import { Card } from '../../components/Card'
 import Pagination from '../../Pagination'
 
 export const Route = createFileRoute('/Home/')({
   component: RouteComponent,
-});
+})
 
 function RouteComponent() {
-  const { isAdmin } = useAuth(); 
-  const [searchTerm, setSearchTerm] = useState(''); 
-  const [showModal, setShowModal] = useState(false); 
-  const [postToEdit, setPostToEdit] = useState<Post | null>(null); 
-  const { data: posts, isLoading, error } = usePosts()
+  const { isAdmin } = useAuth()
   const [searchTerm, setSearchTerm] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [postToEdit, setPostToEdit] = useState<Post | null>(null)
+  const { data: posts, isLoading, error } = usePosts()
   const [admin, setAdmin] = useState<boolean>(false)
   const [currentPage, setCurrentPage] = useState(1)
   const totalPages = 10
@@ -58,8 +49,11 @@ function RouteComponent() {
 
   return (
     <>
-      <Intro title="ÚLTIMAS NOTÍCIAS" description="ACOMPANHE TUDO EM UM SÓ LUGAR" />
-     
+      <Intro
+        title="ÚLTIMAS NOTÍCIAS"
+        description="ACOMPANHE TUDO EM UM SÓ LUGAR"
+      />
+
       <div className="max-w-screen-xl mx-auto pt-10 flex flex-wrap justify-center px-12">
         <div className="relative w-full">
           <input
@@ -88,7 +82,6 @@ function RouteComponent() {
         </div>
       </div>
 
-     
       <ModalForm isVisible={showModal} onClose={() => setShowModal(false)}>
         {postToEdit && postToEdit._id ? (
           <FormPost
@@ -134,5 +127,5 @@ function RouteComponent() {
         />
       </div>
     </>
-  );
+  )
 }

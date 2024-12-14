@@ -25,9 +25,9 @@ export function Card({
     setShowModal?.(true)
   }
 
-  async function handleClickButtonDelete() {
+  function handleClickButtonDelete() {
     if (_id !== undefined && handleDeletePost) {
-      await handleDeletePost(_id)
+      handleDeletePost(_id) // Chamar a função passada por props sem deletar imediatamente
     }
   }
 
