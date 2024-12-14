@@ -31,6 +31,10 @@ Além disso, os encontros semanais de todo o grupo desempenharam um papel crucia
 ## Tecnologias utilizadas
 
 - React
+- Axios
+- Tailwind
+- Tanstack
+- Docker
 
 ---
 
@@ -45,5 +49,3 @@ Caso não tenha o Docker instalado, siga as instruções para seu sistema operac
 ```bash
 docker-compose up --build
 ```
-
----
