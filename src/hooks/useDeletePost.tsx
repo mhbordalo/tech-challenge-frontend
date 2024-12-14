@@ -1,36 +1,29 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 import axios from 'axios'
-import { useAuth } from '../context/AuthContext'
 
 interface DeletePostVariables {
   _id: string
 }
 
 export function useDeletePost() {
-  const queryClient = useQueryClient()
-  const { isLoggedIn } = useAuth()
+  const [isLoading, setIsLoading] = useState(false)
 
-  const mutation = useMutation<void, Error, DeletePostVariables>({
-    mutationFn: async ({ _id }) => {
+  const deletePost = async ({ _id }: DeletePostVariables) => {
+    setIsLoading(true)
+    try {
       const token = localStorage.getItem('token')
-      if (!token) {
-        throw new Error('Token not found')
-      }
+      if (!token) throw new Error('Token não encontrado.')
 
       await axios.delete(
         `https://tech-challenge-back-end.vercel.app/posts/${_id}`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         },
       )
-    },
-    onSuccess: () => {
-      console.log('deletou')
-      queryClient.invalidateQueries(['posts'])
-    },
-  })
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
-  return mutation
+  return { deletePost, isLoading }
 }

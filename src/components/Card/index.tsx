@@ -25,8 +25,10 @@ export function Card({
     setShowModal?.(true)
   }
 
-  function handleClickButtonDelete() {
-    if (post._id !== undefined) handleDeletePost?.(post._id)
+  async function handleClickButtonDelete() {
+    if (_id !== undefined && handleDeletePost) {
+      await handleDeletePost(_id)
+    }
   }
 
   const renderImage = () => {

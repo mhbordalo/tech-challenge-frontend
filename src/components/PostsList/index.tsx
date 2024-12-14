@@ -1,10 +1,12 @@
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { useCurrentPage } from '../../context/CurrentPage'
 import { usePostsPagination } from '../../hooks/usePostsPagination'
+import { useDeletePost } from '../../hooks/useDeletePost'
 import { Card } from '../../components/Card'
 import Pagination from '../../components/Pagination'
 import { Post } from '../../types'
 import Loader from '../Loader'
+import { toast } from 'react-toastify'
 
 export function PostsList({
   searchTerm,
@@ -19,12 +21,27 @@ export function PostsList({
 }) {
   const { currentPage, setCurrentPage } = useCurrentPage()
   const { data, isLoading, isPreviousData } = usePostsPagination(currentPage)
+  const { deletePost } = useDeletePost()
+  const [posts, setPosts] = useState<Post[]>(data?.posts || [])
 
   const filteredPosts = data?.posts?.filter((post) =>
     post.title.toLowerCase().includes(searchTerm.toLowerCase()),
   )
 
   const isLoadingInitialData = isLoading && !data
+
+  async function handleDeletePost(id: string) {
+    const confirmed = window.confirm(
+      'Tem certeza que deseja excluir este post?',
+    )
+    if (!confirmed) return
+    await deletePost({ _id: id })
+    toast.success('Post excluído com sucesso!')
+    // Atualize a lista de posts após a exclusão
+    const updatedPosts = posts.filter((post) => post._id !== id)
+    // Atualize o estado com os posts atualizados
+    setPosts(updatedPosts)
+  }
 
   return (
     <>
@@ -43,7 +60,7 @@ export function PostsList({
               admin={isAdmin}
               setPostToEdit={setPostToEdit}
               setShowModal={setShowModal}
-              handleDeletePost={(id) => console.log('Deletando post:', id)}
+              handleDeletePost={handleDeletePost}
             />
           ))
         ) : (
