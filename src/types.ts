@@ -7,7 +7,7 @@ export type Post = {
 }
 
 export type EditPost = {
-  _id: string
+  _id?: string | undefined
   title: string
   content: string
   img: string | File | null

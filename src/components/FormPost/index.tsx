@@ -1,56 +1,59 @@
-import { useState } from 'react';
-import { Button } from '../Button';
-import { CreatePost, EditPost } from '../../types';
-import { useCreatePost } from '../../hooks/useCreatePost'; 
-import { useEditPost } from '../../hooks/userEditPost'; 
-import { toast } from 'react-toastify';
+import { useState } from 'react'
+import { CreatePost, EditPost, Post } from '../../types'
+import { useCreatePost } from '../../hooks/useCreatePost'
+import { useEditPost } from '../../hooks/userEditPost'
+import { Button } from '../Button'
+import { toast } from 'react-toastify'
 
 interface FormPostProp {
-  postToEdit?: EditPost; 
-  handleCloseModal: () => void;
+  postToEdit: Post | null
+  handleCloseModal: () => void
 }
 
 export function FormPost({ postToEdit, handleCloseModal }: FormPostProp) {
-  const [title, setTitle] = useState(postToEdit?.title || '');
-  const [content, setContent] = useState(postToEdit?.content || '');
-  const [image, setImage] = useState<File | null | string>(postToEdit?.img || null);
+  const [title, setTitle] = useState(postToEdit?.title || '')
+  const [content, setContent] = useState(postToEdit?.content || '')
+  const [image, setImage] = useState<File | null | string>(
+    postToEdit?.img || null,
+  )
   const [preview, setPreview] = useState<string | null>(
-    typeof postToEdit?.img === 'string' ? postToEdit.img : null
-  );
+    typeof postToEdit?.img === 'string' ? postToEdit.img : null,
+  )
 
-  const { createPost, isLoading: isCreating } = useCreatePost(); // Hook de criação
-  const { editPost, isLoading: isEditing } = useEditPost(); // Hook de edição
+  const { mutate: createPost, isLoading: isCreating } = useCreatePost()
+  const { mutate: editPost, isLoading: isEditing } = useEditPost()
 
   const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file = e.target.files?.[0]
     if (file) {
-      setImage(file);
-      setPreview(URL.createObjectURL(file));
+      setImage(file)
+      setPreview(URL.createObjectURL(file))
     }
-  };
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const newImage = image || postToEdit?.img || null;
+    e.preventDefault()
+    const newImage = image || postToEdit?.img || null
 
     try {
       if (postToEdit) {
-        // Atualiza 
-        const updatedPost: EditPost = { ...postToEdit, title, content, img: newImage };
-        await editPost(updatedPost);
-        toast.success('Publicação atualizada com sucesso!');
+        const updatedPost: EditPost = {
+          ...postToEdit,
+          title,
+          content,
+          img: newImage,
+        }
+        editPost(updatedPost)
+        // toast.success já é chamado no onSuccess do hook
       } else {
-        // Cria 
-        const newPost: CreatePost = { title, content, img: newImage };
-        await createPost(newPost);
-        toast.success('Publicação criada com sucesso!');
+        const newPost: CreatePost = { title, content, img: newImage }
+        createPost(newPost)
       }
-      handleCloseModal();
+      handleCloseModal()
     } catch (error: any) {
-      toast.error(error.message || 'Erro ao salvar publicação.');
+      toast.error(error.message || 'Erro ao salvar publicação.')
     }
-  };
+  }
 
   return (
     <div className="max-full bg-white rounded-lg">
@@ -59,7 +62,10 @@ export function FormPost({ postToEdit, handleCloseModal }: FormPostProp) {
       </h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="title" className="block text-sm text-black font-semibold mb-2">
+          <label
+            htmlFor="title"
+            className="block text-sm text-black font-semibold mb-2"
+          >
             Título
           </label>
           <input
@@ -68,10 +74,14 @@ export function FormPost({ postToEdit, handleCloseModal }: FormPostProp) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="content" className="block text-sm text-black font-semibold mb-2">
+          <label
+            htmlFor="content"
+            className="block text-sm text-black font-semibold mb-2"
+          >
             Conteúdo
           </label>
           <textarea
@@ -80,22 +90,29 @@ export function FormPost({ postToEdit, handleCloseModal }: FormPostProp) {
             onChange={(e) => setContent(e.target.value)}
             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             rows={5}
+            required
           />
         </div>
         <div className="mb-5">
-          <label className="block text-sm text-black font-semibold mb-2">
-            Adicionar Imagem
+          <label
+            htmlFor="image"
+            className="block text-sm text-black font-semibold mb-2"
+          >
+            Imagem
           </label>
           <input
             type="file"
             name="image"
+            accept="image/*"
             onChange={handleChangeFile}
-            className="w-full border rounded-lg text-gray-700 text-xs bg-gray-200 file:bg-black-light file: font-normal file:text-white file:text-xs file:me-4 file:py-2 file:px-4 file:w-48 file:hover:bg-grey-dark file:transition file:cursor-pointer"
+            className="w-full"
           />
           {preview && (
-            <div className="flex justify-center mt-2">
-              <img src={preview} alt="Preview" className="w-32 h-32 object-cover" />
-            </div>
+            <img
+              src={preview}
+              alt="Preview"
+              className="mt-4 w-full h-44 object-cover rounded"
+            />
           )}
         </div>
         <Button
@@ -104,9 +121,13 @@ export function FormPost({ postToEdit, handleCloseModal }: FormPostProp) {
           className="w-full"
           disabled={isCreating || isEditing}
         >
-          {isCreating || isEditing ? 'Salvando...' : postToEdit ? 'Atualizar' : 'Publicar'}
+          {isCreating || isEditing
+            ? 'Salvando...'
+            : postToEdit
+              ? 'Atualizar'
+              : 'Publicar'}
         </Button>
       </form>
     </div>
-  );
+  )
 }

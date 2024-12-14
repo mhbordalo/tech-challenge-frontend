@@ -1,16 +1,16 @@
-import { useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 interface DeletePostVariables {
   _id: string
 }
 
 export function useDeletePost() {
-  const [isLoading, setIsLoading] = useState(false)
+  const queryClient = useQueryClient()
 
-  const deletePost = async ({ _id }: DeletePostVariables) => {
-    setIsLoading(true)
-    try {
+  return useMutation({
+    mutationFn: async ({ _id }: DeletePostVariables) => {
       const token = localStorage.getItem('token')
       if (!token) throw new Error('Token não encontrado.')
 
@@ -20,10 +20,13 @@ export function useDeletePost() {
           headers: { Authorization: `Bearer ${token}` },
         },
       )
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  return { deletePost, isLoading }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['posts'])
+      toast.success('Post excluído com sucesso!')
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'Erro ao excluir post.')
+    },
+  })
 }

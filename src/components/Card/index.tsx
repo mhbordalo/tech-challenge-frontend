@@ -60,48 +60,28 @@ export function Card({
   }
 
   return (
-    <div className="w-96 h-96 rounded overflow-hidden shadow-lg m-2 relative mb-5">
+    <div className="relative w-80 h-96 bg-white rounded-lg shadow-md overflow-hidden m-4 transition-all duration-500 hover:scale-110 hover:cursor-pointer">
       <Link to={`/Details/${post._id}`} key={post._id}>
         {renderImage()}
-        <div className="px-6">
-          <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs text-gray-700 mr-2 mt-3">
-            {author}
-          </span>
-          <div className="font-bold text-xl pt-2 pb-1">{title}</div>
-          <p className="text-black text-base leading-none line-clamp-1 pb-5">
-            {content}
-          </p>
+        <div className="p-4">
+          <h3 className="text-lg font-semibold mb-2">{title}</h3>
+          <p className="text-gray-700 mb-24 line-clamp-1">{content}</p>
+          <p className="text-sm text-gray-500">Autor: {author}</p>
         </div>
       </Link>
-
       {admin ? (
-        <div className="px-6 pt-4 pb-2 flex justify-between">
-          <Button
-            size="lg"
-            variant="warning"
-            className="w-40"
-            onClick={handleClickButtonEdit}
-          >
-            EDITAR
+        <div className="absolute top-2 right-2 flex space-x-2">
+          <Button size="sm" variant="primary" onClick={handleClickButtonEdit}>
+            Editar
           </Button>
-          <Button
-            size="lg"
-            variant="danger"
-            className="w-40"
-            onClick={handleClickButtonDelete}
-          >
-            EXCLUIR
+          <Button size="sm" variant="danger" onClick={handleClickButtonDelete}>
+            Excluir
           </Button>
         </div>
       ) : (
         <div className="absolute bottom-3 w-full px-6 pt-4 pb-2">
           <Link to={`/Details/${post._id}`} key={post._id}>
-            <Button
-              className="w-full"
-              size="lg"
-              variant="primary"
-              onClick={() => console.log('read ', _id)}
-            >
+            <Button className="w-full" size="lg" variant="primary">
               LER PUBLICAÇÃO
             </Button>
           </Link>
