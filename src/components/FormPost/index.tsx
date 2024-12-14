@@ -52,82 +52,97 @@ export function FormPost({ postToEdit, handleCloseModal }: FormPostProp) {
       handleCloseModal()
     } catch (error: any) {
       toast.error(error.message || 'Erro ao salvar publicação.')
-    }
-  }
+      console.log(image)
+      let newImage
+      if (image === null) {
+        newImage = postToEdit.img
+      } else {
+        newImage = image
+      }
 
-  return (
-    <div className="max-full bg-white rounded-lg">
-      <h2 className="text-base text-black font-semibold mb-4">
-        {postToEdit ? 'Editar Publicação' : 'Nova Publicação'}
-      </h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label
-            htmlFor="title"
-            className="block text-sm text-black font-semibold mb-2"
-          >
-            Título
-          </label>
-          <input
-            type="text"
-            name="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="content"
-            className="block text-sm text-black font-semibold mb-2"
-          >
-            Conteúdo
-          </label>
-          <textarea
-            name="content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            rows={5}
-            required
-          />
-        </div>
-        <div className="mb-5">
-          <label
-            htmlFor="image"
-            className="block text-sm text-black font-semibold mb-2"
-          >
-            Imagem
-          </label>
-          <input
-            type="file"
-            name="image"
-            accept="image/*"
-            onChange={handleChangeFile}
-            className="w-full"
-          />
-          {preview && (
-            <img
-              src={preview}
-              alt="Preview"
-              className="mt-4 w-full h-44 object-cover rounded"
+      const newPost = {
+        _id: postToEdit._id,
+        author: postToEdit.author,
+        title: titleEdited,
+        content: contentEdited,
+        img: newImage,
+      }
+    }
+
+    return (
+      <div className="max-full bg-white rounded-lg">
+        <h2 className="text-base text-black font-semibold mb-4">
+          {postToEdit ? 'Editar Publicação' : 'Nova Publicação'}
+        </h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label
+              htmlFor="title"
+              className="block text-sm text-black font-semibold mb-2"
+            >
+              Título
+            </label>
+            <input
+              type="text"
+              name="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
-          )}
-        </div>
-        <Button
-          size="lg"
-          type="submit"
-          className="w-full"
-          disabled={isCreating || isEditing}
-        >
-          {isCreating || isEditing
-            ? 'Salvando...'
-            : postToEdit
-              ? 'Atualizar'
-              : 'Publicar'}
-        </Button>
-      </form>
-    </div>
-  )
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="content"
+              className="block text-sm text-black font-semibold mb-2"
+            >
+              Conteúdo
+            </label>
+            <textarea
+              name="content"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows={5}
+              required
+            />
+          </div>
+          <div className="mb-5">
+            <label
+              htmlFor="image"
+              className="block text-sm text-black font-semibold mb-2"
+            >
+              Imagem
+            </label>
+            <input
+              type="file"
+              name="image"
+              accept="image/*"
+              onChange={handleChangeFile}
+              className="w-full"
+            />
+            {preview && (
+              <img
+                src={preview}
+                alt="Preview"
+                className="mt-4 w-full h-44 object-cover rounded"
+              />
+            )}
+          </div>
+          <Button
+            size="lg"
+            type="submit"
+            className="w-full"
+            disabled={isCreating || isEditing}
+          >
+            {isCreating || isEditing
+              ? 'Salvando...'
+              : postToEdit
+                ? 'Atualizar'
+                : 'Publicar'}
+          </Button>
+        </form>
+      </div>
+    )
+  }
 }
