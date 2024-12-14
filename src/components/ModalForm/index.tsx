@@ -1,33 +1,33 @@
-import ReactDOM from 'react-dom';
-import { useEffect } from 'react';
+import ReactDOM from 'react-dom'
+import { useEffect } from 'react'
 
 interface ModalFormProps {
-  isVisible: boolean;
-  onClose: () => void;
-  children: React.ReactNode;
+  isVisible: boolean
+  onClose: () => void
+  children: React.ReactNode
 }
 
 export function ModalForm({ isVisible, onClose, children }: ModalFormProps) {
   useEffect(() => {
     if (isVisible) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden'
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = ''
     }
 
     return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isVisible]);
+      document.body.style.overflow = ''
+    }
+  }, [isVisible])
 
   if (!isVisible) {
-    return null;
+    return null
   }
 
   function handleClose(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    const target = e.target as HTMLDivElement;
+    const target = e.target as HTMLDivElement
     if (target.id === 'wrapper') {
-      onClose();
+      onClose()
     }
   }
 
@@ -47,6 +47,6 @@ export function ModalForm({ isVisible, onClose, children }: ModalFormProps) {
         {children}
       </div>
     </div>,
-    document.body
-  );
+    document.body,
+  )
 }

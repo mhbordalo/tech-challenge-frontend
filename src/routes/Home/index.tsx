@@ -5,10 +5,7 @@ import { FormPost } from '../../components/FormPost'
 import { PostsList } from '../../components/PostsList'
 import { Post } from '../../types'
 import { useAuth } from '../../context/AuthContext'
-import { useEffect, useState } from 'react'
-import { usePosts } from '../../hooks/usePosts'
-import { Card } from '../../components/Card'
-import Pagination from '../../Pagination'
+import { useState } from 'react'
 
 export const Route = createFileRoute('/Home/')({
   component: RouteComponent,
@@ -19,33 +16,6 @@ function RouteComponent() {
   const [searchTerm, setSearchTerm] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [postToEdit, setPostToEdit] = useState<Post | null>(null)
-  const { data: posts, isLoading, error } = usePosts()
-  const [admin, setAdmin] = useState<boolean>(false)
-  const [currentPage, setCurrentPage] = useState(1)
-  const totalPages = 10
-
-  useEffect(() => {
-    const userIsAdmin = true
-    setAdmin(userIsAdmin)
-  }, [])
-  function handlePageChange(page: number) {
-    setCurrentPage(page)
-  }
-
-  if (isLoading) return <p>Carregando...</p>
-  if (error instanceof Error) return <p>Erro: {error.message}</p>
-
-  function handleDeletePost(_id: string) {
-    console.log(`Deletar post com ID: ${_id}`)
-  }
-
-  function handleEditedPost(postEdited: Post) {
-    console.log('Post editado:', postEdited)
-  }
-
-  const filteredPosts = posts?.filter((post: Post) =>
-    post.title.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
 
   return (
     <>
@@ -85,12 +55,7 @@ function RouteComponent() {
       <ModalForm isVisible={showModal} onClose={() => setShowModal(false)}>
         {postToEdit && postToEdit._id ? (
           <FormPost
-            postToEdit={{
-              _id: postToEdit._id,
-              title: postToEdit.title,
-              content: postToEdit.content,
-              img: postToEdit.img,
-            }}
+            postToEdit={postToEdit}
             handleCloseModal={() => setShowModal(false)}
           />
         ) : (
@@ -103,29 +68,6 @@ function RouteComponent() {
         setPostToEdit={setPostToEdit}
         setShowModal={setShowModal}
       />
-      <div className="max-w-screen-xl mx-auto py-10 flex flex-wrap justify-center">
-        {filteredPosts?.length ? (
-          filteredPosts.map((post: Post) => (
-            <Card
-              key={post._id}
-              post={post}
-              admin={admin}
-              setPostToEdit={setPostToEdit}
-              setShowModal={setShowModal}
-              handleDeletePost={handleDeletePost}
-            />
-          ))
-        ) : (
-          <p className="text-gray-500">Nenhum post encontrado.</p>
-        )}
-      </div>
-      <div>
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
-      </div>
     </>
   )
 }

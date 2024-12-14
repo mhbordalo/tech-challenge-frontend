@@ -27,7 +27,7 @@ export function Card({
 
   function handleClickButtonDelete() {
     if (_id !== undefined && handleDeletePost) {
-      handleDeletePost(_id) // Chamar a função passada por props sem deletar imediatamente
+      handleDeletePost(_id)
     }
   }
 
