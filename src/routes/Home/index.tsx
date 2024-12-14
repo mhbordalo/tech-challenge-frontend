@@ -6,6 +6,15 @@ import { FormPost } from '../../components/FormPost';
 import { PostsList } from '../../components/PostsList';
 import { Post } from '../../types';
 import { useAuth } from '../../context/AuthContext';
+import { useEffect, useState } from 'react'
+import { createFileRoute } from '@tanstack/react-router'
+import { usePosts } from '../../hooks/usePosts'
+import { Card } from '../../components/Card'
+import { Intro } from '../../components/Intro'
+import { ModalForm } from '../../components/ModalForm'
+import { Post } from '../../types'
+import { FormPost } from '../../components/FormPost'
+import Pagination from '../../Pagination'
 
 export const Route = createFileRoute('/Home/')({
   component: RouteComponent,
@@ -16,7 +25,36 @@ function RouteComponent() {
   const [searchTerm, setSearchTerm] = useState(''); 
   const [showModal, setShowModal] = useState(false); 
   const [postToEdit, setPostToEdit] = useState<Post | null>(null); 
+  const { data: posts, isLoading, error } = usePosts()
+  const [searchTerm, setSearchTerm] = useState('')
+  const [showModal, setShowModal] = useState(false)
+  const [postToEdit, setPostToEdit] = useState<Post | null>(null)
+  const [admin, setAdmin] = useState<boolean>(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const totalPages = 10
 
+  useEffect(() => {
+    const userIsAdmin = true
+    setAdmin(userIsAdmin)
+  }, [])
+  function handlePageChange(page: number) {
+    setCurrentPage(page)
+  }
+
+  if (isLoading) return <p>Carregando...</p>
+  if (error instanceof Error) return <p>Erro: {error.message}</p>
+
+  function handleDeletePost(_id: string) {
+    console.log(`Deletar post com ID: ${_id}`)
+  }
+
+  function handleEditedPost(postEdited: Post) {
+    console.log('Post editado:', postEdited)
+  }
+
+  const filteredPosts = posts?.filter((post: Post) =>
+    post.title.toLowerCase().includes(searchTerm.toLowerCase()),
+  )
 
   return (
     <>
@@ -66,13 +104,35 @@ function RouteComponent() {
           <FormPost handleCloseModal={() => setShowModal(false)} />
         )}
       </ModalForm>
-
       <PostsList
         searchTerm={searchTerm}
         isAdmin={isAdmin}
         setPostToEdit={setPostToEdit}
         setShowModal={setShowModal}
       />
+      <div className="max-w-screen-xl mx-auto py-10 flex flex-wrap justify-center">
+        {filteredPosts?.length ? (
+          filteredPosts.map((post: Post) => (
+            <Card
+              key={post._id}
+              post={post}
+              admin={admin}
+              setPostToEdit={setPostToEdit}
+              setShowModal={setShowModal}
+              handleDeletePost={handleDeletePost}
+            />
+          ))
+        ) : (
+          <p className="text-gray-500">Nenhum post encontrado.</p>
+        )}
+      </div>
+      <div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      </div>
     </>
   );
 }

@@ -52,6 +52,20 @@ export function FormPost({ postToEdit, handleCloseModal }: FormPostProp) {
       handleCloseModal()
     } catch (error: any) {
       toast.error(error.message || 'Erro ao salvar publicação.')
+    console.log(image)
+    let newImage;
+    if (image === null) {
+      newImage = postToEdit.img;
+    } else {
+      newImage = image
+    }
+
+    const newPost = {
+      _id: postToEdit._id,
+      author: postToEdit.author,
+      title: titleEdited,
+      content: contentEdited,
+      img: newImage
     }
   }
 
