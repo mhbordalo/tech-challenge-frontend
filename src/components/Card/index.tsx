@@ -68,7 +68,7 @@ export function Card({
             {author}
           </span>
           <div className="font-bold text-xl pt-2 pb-1">{title}</div>
-          <p className="text-black text-base leading-none line-clamp-3 pb-5">
+          <p className="text-black text-base leading-none line-clamp-1 pb-5">
             {content}
           </p>
         </div>
