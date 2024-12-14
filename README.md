@@ -56,5 +56,5 @@ docker-compose up --build
 
 ```bash
 user: professor@fiap.com
-kay: password1234
+key: password1234
 ```
