@@ -31,6 +31,10 @@ Além disso, os encontros semanais de todo o grupo desempenharam um papel crucia
 ## Tecnologias utilizadas
 
 - React
+- Axios
+- Tailwind
+- Tanstack
+- Docker
 
 ---
 
@@ -47,3 +51,10 @@ docker-compose up --build
 ```
 
 ---
+
+## Usúario de testes
+
+```bash
+user: professor@fiap.com
+key: password1234
+```

@@ -1,20 +1,29 @@
 import { useState } from 'react'
+import { CreatePost, EditPost, Post } from '../../types'
+import { useCreatePost } from '../../hooks/useCreatePost'
+import { useEditPost } from '../../hooks/userEditPost'
 import { Button } from '../Button'
-import { Post } from '../../types'
+import { toast } from 'react-toastify'
 
 interface FormPostProp {
-  postToEdit: Post
-  handleEditedPostList: (post: Post) => void
+  postToEdit: Post | null
+  handleCloseModal: () => void
 }
 
-export function FormPost({ postToEdit, handleEditedPostList }: FormPostProp) {
-  //const [post, setPost] = useState(postToEdit)
-  const [titleEdited, setTitleEdited] = useState(postToEdit.title)
-  const [contentEdited, setContentEdited] = useState(postToEdit.content)
-  const [image, setImage] = useState<File | null | string>(null)
-  const [preview, setPreview] = useState<string | null>(null)
+export function FormPost({ postToEdit, handleCloseModal }: FormPostProp) {
+  const [title, setTitle] = useState(postToEdit?.title || '')
+  const [content, setContent] = useState(postToEdit?.content || '')
+  const [image, setImage] = useState<File | null | string>(
+    postToEdit?.img || null,
+  )
+  const [preview, setPreview] = useState<string | null>(
+    typeof postToEdit?.img === 'string' ? postToEdit.img : null,
+  )
 
-  function handleChangeFile(e: React.ChangeEvent<HTMLInputElement>): void {
+  const { mutate: createPost, isLoading: isCreating } = useCreatePost()
+  const { mutate: editPost, isLoading: isEditing } = useEditPost()
+
+  const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
       setImage(file)
@@ -22,8 +31,27 @@ export function FormPost({ postToEdit, handleEditedPostList }: FormPostProp) {
     }
   }
 
-  function handleSubmit(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const newImage = image || postToEdit?.img || null
+
+    try {
+      if (postToEdit) {
+        const updatedPost: EditPost = {
+          ...postToEdit,
+          title,
+          content,
+          img: newImage,
+        }
+        editPost(updatedPost)
+        // toast.success já é chamado no onSuccess do hook
+      } else {
+        const newPost: CreatePost = { title, content, img: newImage }
+        createPost(newPost)
+      }
+      handleCloseModal()
+    } catch (error: any) {
+      toast.error(error.message || 'Erro ao salvar publicação.')
     console.log(image)
     let newImage;
     if (image === null) {
@@ -39,66 +67,79 @@ export function FormPost({ postToEdit, handleEditedPostList }: FormPostProp) {
       content: contentEdited,
       img: newImage
     }
-    handleEditedPostList(newPost)
   }
 
   return (
-    <div className="max-full bg-white rounded-lg ">
+    <div className="max-full bg-white rounded-lg">
       <h2 className="text-base text-black font-semibold mb-4">
-        Nova Publicação
+        {postToEdit ? 'Editar Publicação' : 'Nova Publicação'}
       </h2>
-      <form >
+      <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label
             htmlFor="title"
             className="block text-sm text-black font-semibold mb-2"
-          ></label>
+          >
+            Título
+          </label>
           <input
             type="text"
             name="title"
-            value={titleEdited}
-            onChange={(e) => setTitleEdited(e.target.value)}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
           />
         </div>
         <div className="mb-4">
           <label
             htmlFor="content"
-            className="block text-black text-sm font-semibold mb-2"
+            className="block text-sm text-black font-semibold mb-2"
           >
             Conteúdo
           </label>
           <textarea
             name="content"
-            value={contentEdited}
-            onChange={(e) => setContentEdited(e.target.value)}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             rows={5}
-          ></textarea>
+            required
+          />
         </div>
         <div className="mb-5">
-          <label className="block text-black text-sm font-semibold mb-2">
-            Adicionar Imagem do Post
+          <label
+            htmlFor="image"
+            className="block text-sm text-black font-semibold mb-2"
+          >
+            Imagem
           </label>
-
           <input
             type="file"
             name="image"
+            accept="image/*"
             onChange={handleChangeFile}
-            className="w-full border rounded-lg text-gray-700 text-xs bg-gray-200 file:bg-black-light file: font-normal file:text-white file:text-xs file:me-4 file:py-2 file:px-4 file:w-48 file:hover:bg-grey-dark file:transition file:cursor-pointer"
+            className="w-full"
           />
           {preview && (
-            <div className=' flex justify-center'>
-              <img
-                src={preview}
-                alt="Preview"
-                className="mb-4 w-32 h-32 object-cover"
-              />
-            </div>
+            <img
+              src={preview}
+              alt="Preview"
+              className="mt-4 w-full h-44 object-cover rounded"
+            />
           )}
         </div>
-        <Button size="lg" onClick={handleSubmit} className="w-full" id="wrapper">
-          PUBLICAR
+        <Button
+          size="lg"
+          type="submit"
+          className="w-full"
+          disabled={isCreating || isEditing}
+        >
+          {isCreating || isEditing
+            ? 'Salvando...'
+            : postToEdit
+              ? 'Atualizar'
+              : 'Publicar'}
         </Button>
       </form>
     </div>

@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginIndexImport } from './routes/Login/index'
 import { Route as HomeIndexImport } from './routes/Home/index'
+import { Route as DetailsPostIdImport } from './routes/Details/$postId'
 
 // Create/Update Routes
 
@@ -28,10 +29,23 @@ const HomeIndexRoute = HomeIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const DetailsPostIdRoute = DetailsPostIdImport.update({
+  id: '/Details/$postId',
+  path: '/Details/$postId',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/Details/$postId': {
+      id: '/Details/$postId'
+      path: '/Details/$postId'
+      fullPath: '/Details/$postId'
+      preLoaderRoute: typeof DetailsPostIdImport
+      parentRoute: typeof rootRoute
+    }
     '/Home/': {
       id: '/Home/'
       path: '/Home'
@@ -52,36 +66,41 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
+  '/Details/$postId': typeof DetailsPostIdRoute
   '/Home': typeof HomeIndexRoute
   '/Login': typeof LoginIndexRoute
 }
 
 export interface FileRoutesByTo {
+  '/Details/$postId': typeof DetailsPostIdRoute
   '/Home': typeof HomeIndexRoute
   '/Login': typeof LoginIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
+  '/Details/$postId': typeof DetailsPostIdRoute
   '/Home/': typeof HomeIndexRoute
   '/Login/': typeof LoginIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/Home' | '/Login'
+  fullPaths: '/Details/$postId' | '/Home' | '/Login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/Home' | '/Login'
-  id: '__root__' | '/Home/' | '/Login/'
+  to: '/Details/$postId' | '/Home' | '/Login'
+  id: '__root__' | '/Details/$postId' | '/Home/' | '/Login/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
+  DetailsPostIdRoute: typeof DetailsPostIdRoute
   HomeIndexRoute: typeof HomeIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  DetailsPostIdRoute: DetailsPostIdRoute,
   HomeIndexRoute: HomeIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
 }
@@ -96,9 +115,13 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
+        "/Details/$postId",
         "/Home/",
         "/Login/"
       ]
+    },
+    "/Details/$postId": {
+      "filePath": "Details/$postId.tsx"
     },
     "/Home/": {
       "filePath": "Home/index.tsx"

@@ -1,3 +1,11 @@
+import { useState } from 'react';
+import { createFileRoute } from '@tanstack/react-router';
+import { Intro } from '../../components/Intro';
+import { ModalForm } from '../../components/ModalForm';
+import { FormPost } from '../../components/FormPost';
+import { PostsList } from '../../components/PostsList';
+import { Post } from '../../types';
+import { useAuth } from '../../context/AuthContext';
 import { useEffect, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { usePosts } from '../../hooks/usePosts'
@@ -10,9 +18,13 @@ import Pagination from '../../Pagination'
 
 export const Route = createFileRoute('/Home/')({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
+  const { isAdmin } = useAuth(); 
+  const [searchTerm, setSearchTerm] = useState(''); 
+  const [showModal, setShowModal] = useState(false); 
+  const [postToEdit, setPostToEdit] = useState<Post | null>(null); 
   const { data: posts, isLoading, error } = usePosts()
   const [searchTerm, setSearchTerm] = useState('')
   const [showModal, setShowModal] = useState(false)
@@ -46,11 +58,8 @@ function RouteComponent() {
 
   return (
     <>
-      <Intro
-        title="ÚLTIMAS NOTÍCIAS"
-        description="ACOMPANHE TUDO EM UM SÓ LUGAR"
-      />
-
+      <Intro title="ÚLTIMAS NOTÍCIAS" description="ACOMPANHE TUDO EM UM SÓ LUGAR" />
+     
       <div className="max-w-screen-xl mx-auto pt-10 flex flex-wrap justify-center px-12">
         <div className="relative w-full">
           <input
@@ -79,15 +88,28 @@ function RouteComponent() {
         </div>
       </div>
 
+     
       <ModalForm isVisible={showModal} onClose={() => setShowModal(false)}>
-        {postToEdit && (
+        {postToEdit && postToEdit._id ? (
           <FormPost
-            postToEdit={postToEdit}
-            handleEditedPostList={handleEditedPost}
+            postToEdit={{
+              _id: postToEdit._id,
+              title: postToEdit.title,
+              content: postToEdit.content,
+              img: postToEdit.img,
+            }}
+            handleCloseModal={() => setShowModal(false)}
           />
+        ) : (
+          <FormPost handleCloseModal={() => setShowModal(false)} />
         )}
       </ModalForm>
-
+      <PostsList
+        searchTerm={searchTerm}
+        isAdmin={isAdmin}
+        setPostToEdit={setPostToEdit}
+        setShowModal={setShowModal}
+      />
       <div className="max-w-screen-xl mx-auto py-10 flex flex-wrap justify-center">
         {filteredPosts?.length ? (
           filteredPosts.map((post: Post) => (
@@ -112,5 +134,5 @@ function RouteComponent() {
         />
       </div>
     </>
-  )
+  );
 }
