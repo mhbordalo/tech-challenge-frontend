@@ -28,6 +28,7 @@ function RouteComponent() {
     const userIsAdmin = true
     setAdmin(userIsAdmin)
   }, [])
+
   function handlePageChange(page: number) {
     setCurrentPage(page)
   }
@@ -37,10 +38,6 @@ function RouteComponent() {
 
   function handleDeletePost(_id: string) {
     console.log(`Deletar post com ID: ${_id}`)
-  }
-
-  function handleEditedPost(postEdited: Post) {
-    console.log('Post editado:', postEdited)
   }
 
   const filteredPosts = posts?.filter((post: Post) =>
@@ -85,12 +82,7 @@ function RouteComponent() {
       <ModalForm isVisible={showModal} onClose={() => setShowModal(false)}>
         {postToEdit && postToEdit._id ? (
           <FormPost
-            postToEdit={{
-              _id: postToEdit._id,
-              title: postToEdit.title,
-              content: postToEdit.content,
-              img: postToEdit.img,
-            }}
+            postToEdit={postToEdit}
             handleCloseModal={() => setShowModal(false)}
           />
         ) : (
