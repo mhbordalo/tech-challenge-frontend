@@ -49,3 +49,12 @@ Caso não tenha o Docker instalado, siga as instruções para seu sistema operac
 ```bash
 docker-compose up --build
 ```
+
+---
+
+## Usúario de testes
+
+```bash
+user: professor@fiap.com
+kay: password1234
+```
