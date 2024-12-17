@@ -12,11 +12,11 @@ export function usePostsPagination(page: number) {
     queryKey: ['posts', page],
     queryFn: async () => {
       const response = await axios.get<PostsResponse>(
-        `https://tech-challenge-back-end.vercel.app/posts/pagination?page=${page}`,
+        `https://tech-challenge-back-end.vercel.app/posts/pagination?page=${page}`
       )
       return response.data
     },
-    staleTime: 1000 * 60 * 5, // 5 minutos
+    staleTime: 1000 * 60 * 5, 
     keepPreviousData: true,
   })
 }
