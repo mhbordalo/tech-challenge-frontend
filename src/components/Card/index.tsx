@@ -60,16 +60,16 @@ export function Card({
   }
 
   return (
-    <div className="relative w-80 h-96 bg-white rounded-lg shadow-md overflow-hidden m-4 transition-all duration-500 hover:scale-110 hover:cursor-pointer">
+    <div className="relative w-80 bg-white rounded-lg shadow-md overflow-hidden m-4 transition-all duration-500 hover:scale-105 hover:cursor-pointer">
       <Link to={`/Details/${post._id}`} key={post._id}>
         {renderImage()}
         <div className="p-4">
           <h3 className="text-lg font-semibold mb-2">{title}</h3>
-          <p className="text-gray-700 mb-24 line-clamp-1">{content}</p>
+          <p className="text-gray-700 mb-10 line-clamp-3 min-h-[4.5rem]">{content}</p>
           <p className="text-sm text-gray-500">Autor: {author}</p>
         </div>
       </Link>
-      {admin ? (
+      {admin && (
         <div className="absolute top-2 right-2 flex space-x-2">
           <Button size="sm" variant="primary" onClick={handleClickButtonEdit}>
             Editar
@@ -77,14 +77,6 @@ export function Card({
           <Button size="sm" variant="danger" onClick={handleClickButtonDelete}>
             Excluir
           </Button>
-        </div>
-      ) : (
-        <div className="absolute bottom-3 w-full px-6 pt-4 pb-2">
-          <Link to={`/Details/${post._id}`} key={post._id}>
-            <Button className="w-full" size="lg" variant="primary">
-              LER PUBLICAÇÃO
-            </Button>
-          </Link>
         </div>
       )}
     </div>

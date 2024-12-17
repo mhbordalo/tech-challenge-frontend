@@ -43,7 +43,11 @@ export default function Pagination({
       {pages.map((page) => (
         <button
           key={page}
-          className={`text-green-dark px-4 py-2 rounded shadow active:shadow-none ${page === currentPage ? 'bg-green-dark text-white' : 'bg-white border-2 border-transparent hover:border-green-dark'} active:shadow-none`}
+          className={`text-green-dark px-4 py-2 rounded shadow active:shadow-none ${
+            page === currentPage
+              ? 'bg-green-dark text-white'
+              : 'bg-white border-2 border-transparent hover:border-green-dark'
+          } active:shadow-none`}
           onClick={() => onPageChange(page)}
         >
           {page}
