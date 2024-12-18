@@ -42,11 +42,12 @@ function PostDetail() {
       <Intro title={post?.title} description={post?.author} />
       <div className="max-w-screen-xl mx-auto pt-10 px-12">
         <div className="flex justify-center">
-          <img src={post?.img} className="w-full sm:max-w-[60%] md:max-w-[43%] lg:max-w-[35%] mb-4" />
+          <img
+            src={typeof post?.img === 'string' ? post.img : undefined}
+            className="w-full sm:max-w-[60%] md:max-w-[43%] lg:max-w-[35%] mb-4"
+          />
         </div>
-        <p className="mt-8 mb-11">
-          {post?.content}
-        </p>
+        <p className="mt-8 mb-11">{post?.content}</p>
       </div>
     </div>
   )

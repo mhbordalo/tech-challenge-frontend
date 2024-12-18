@@ -1,12 +1,10 @@
-import { useState } from 'react'
-import { CreatePost, EditPost, Post } from '../../types'
+import React, { useState } from 'react'
 import { useCreatePost } from '../../hooks/useCreatePost'
 import { useEditPost } from '../../hooks/userEditPost'
-import { Button } from '../Button'
-import { toast } from 'react-toastify'
+import { Post, EditPost } from '../../types'
 
 interface FormPostProps {
-  postToEdit?: Post | null
+  postToEdit?: Post
   handleCloseModal: () => void
 }
 
@@ -20,8 +18,11 @@ export function FormPost({ postToEdit, handleCloseModal }: FormPostProps) {
     typeof postToEdit?.img === 'string' ? postToEdit.img : null,
   )
 
-  const { mutate: createPost, isLoading: isCreating } = useCreatePost()
-  const { mutate: editPost, isLoading: isEditing } = useEditPost()
+  const { mutate: createPost, status: createStatus } = useCreatePost()
+  const { mutate: editPost, status: editStatus } = useEditPost()
+
+  const isCreating = createStatus === 'pending'
+  const isEditing = editStatus === 'pending'
 
   const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -45,99 +46,34 @@ export function FormPost({ postToEdit, handleCloseModal }: FormPostProps) {
         }
         editPost(updatedPost)
       } else {
-        const newPost: CreatePost = {
-          title,
-          content,
-          img: newImage,
-        }
-        createPost(newPost)
+        createPost({ title, content, img: newImage })
       }
       handleCloseModal()
-    } catch (error: any) {
-      toast.error(error.message || 'Erro ao salvar publicação.')
+    } catch (error) {
+      console.error('Failed to submit post:', error)
     }
   }
 
   return (
-    <div className="max-full bg-white rounded-lg">
-      <h2 className="text-base text-black font-semibold mb-4">
-        {postToEdit ? 'Editar Publicação' : 'Nova Publicação'}
-      </h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label
-            htmlFor="title"
-            className="block text-sm text-black font-semibold mb-2"
-          >
-            Título
-          </label>
-          <input
-            type="text"
-            name="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="content"
-            className="block text-sm text-black font-semibold mb-2"
-          >
-            Conteúdo
-          </label>
-          <textarea
-            name="content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            rows={5}
-            required
-          />
-        </div>
-        <div className="mb-5">
-          <label
-            htmlFor="image-upload"
-            className="block text-sm text-black font-semibold mb-2 cursor-pointer"
-          >
-            Imagem
-          </label>
-          <input
-            type="file"
-            id="image-upload"
-            name="image"
-            accept="image/*"
-            onChange={handleChangeFile}
-            className="hidden"
-          />
-          <label
-            htmlFor="image-upload"
-            className="inline-block px-4 py-2 bg-green-dark text-white rounded-lg hover:bg-green-light transition-colors cursor-pointer"
-          >
-            Escolher Imagem
-          </label>
-          {preview && (
-            <img
-              src={preview}
-              alt="Preview"
-              className="mt-4 w-full h-44 object-cover rounded"
-            />
-          )}
-        </div>
-        <Button
-          size="lg"
-          type="submit"
-          className="w-full"
-          disabled={isCreating || isEditing}
-        >
-          {isCreating || isEditing
-            ? 'Salvando...'
-            : postToEdit
-              ? 'Atualizar'
-              : 'Publicar'}
-        </Button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="Título"
+        required
+      />
+      <textarea
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        placeholder="Conteúdo"
+        required
+      />
+      <input type="file" onChange={handleChangeFile} />
+      {preview && <img src={preview} alt="Preview" />}
+      <button type="submit" disabled={isCreating || isEditing}>
+        {postToEdit ? 'Editar' : 'Criar'}
+      </button>
+    </form>
   )
 }

@@ -16,7 +16,7 @@ export function PostsList({
   setPostToEdit,
   setShowModal,
 }: {
-  posts: Post[] 
+  posts: Post[]
   searchTerm: string
   isAdmin: boolean
   setPostToEdit: Dispatch<SetStateAction<Post | null>>
@@ -29,9 +29,9 @@ export function PostsList({
   const [postIdToDelete, setPostIdToDelete] = useState<string | null>(null)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
-const displayedPosts: Post[] = searchTerm
-  ? posts 
-  : (data?.posts as Post[]) || [] 
+  const displayedPosts: Post[] = searchTerm
+    ? posts
+    : (data?.posts as Post[]) || []
 
   const totalPages = searchTerm ? 1 : data?.totalPages || 1
 
@@ -78,7 +78,7 @@ const displayedPosts: Post[] = searchTerm
               admin={isAdmin}
               setPostToEdit={setPostToEdit}
               setShowModal={setShowModal}
-              handleDeletePost={() => handleDeletePost(post._id)}
+              handleDeletePost={() => post._id && handleDeletePost(post._id)}
             />
           ))
         ) : (

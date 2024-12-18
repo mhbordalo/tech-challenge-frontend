@@ -28,11 +28,15 @@ export function useEditPost() {
       )
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['posts'])
+      queryClient.invalidateQueries({ queryKey: ['posts'] })
       toast.success('Post atualizado com sucesso!')
     },
-    onError: (error: any) => {
-      toast.error(error.message || 'Erro ao atualizar post.')
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        toast.error(error.message || 'Erro ao atualizar post.')
+      } else {
+        toast.error('Erro ao atualizar post.')
+      }
     },
   })
 }

@@ -30,7 +30,7 @@ export function useCreatePost() {
       return response.data
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['posts'])
+      queryClient.invalidateQueries({ queryKey: ['posts'] })
       toast.success('Post criado com sucesso!')
     },
     onError: (error: Error) => {

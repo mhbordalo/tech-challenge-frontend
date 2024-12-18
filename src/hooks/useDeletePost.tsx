@@ -22,7 +22,7 @@ export function useDeletePost() {
       )
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['posts'])
+      queryClient.invalidateQueries({ queryKey: ['posts'] })
       toast.success('Post excluído com sucesso!')
     },
     onError: (error: Error) => {
