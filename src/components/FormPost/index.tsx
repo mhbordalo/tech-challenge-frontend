@@ -1,12 +1,11 @@
 import { useState } from 'react'
-import { CreatePost, EditPost, Post } from '../../types'
 import { useCreatePost } from '../../hooks/useCreatePost'
 import { useEditPost } from '../../hooks/userEditPost'
+import { Post, EditPost } from '../../types'
 import { Button } from '../Button'
-import { toast } from 'react-toastify'
 
 interface FormPostProps {
-  postToEdit?: Post | null
+  postToEdit?: Post
   handleCloseModal: () => void
 }
 
@@ -20,8 +19,11 @@ export function FormPost({ postToEdit, handleCloseModal }: FormPostProps) {
     typeof postToEdit?.img === 'string' ? postToEdit.img : null,
   )
 
-  const { mutate: createPost, isLoading: isCreating } = useCreatePost()
-  const { mutate: editPost, isLoading: isEditing } = useEditPost()
+  const { mutate: createPost, status: createStatus } = useCreatePost()
+  const { mutate: editPost, status: editStatus } = useEditPost()
+
+  const isCreating = createStatus === 'pending'
+  const isEditing = editStatus === 'pending'
 
   const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -45,25 +47,16 @@ export function FormPost({ postToEdit, handleCloseModal }: FormPostProps) {
         }
         editPost(updatedPost)
       } else {
-        const newPost: CreatePost = {
-          title,
-          content,
-          img: newImage,
-        }
-        createPost(newPost)
+        createPost({ title, content, img: newImage })
       }
       handleCloseModal()
-    } catch (error: any) {
-      toast.error(error.message || 'Erro ao salvar publicação.')
+    } catch (error) {
+      console.error('Failed to submit post:', error)
     }
   }
 
   return (
-    <div className="max-full bg-white rounded-lg">
-      <h2 className="text-base text-black font-semibold mb-4">
-        {postToEdit ? 'Editar Publicação' : 'Nova Publicação'}
-      </h2>
-      <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label
             htmlFor="title"
@@ -138,6 +131,5 @@ export function FormPost({ postToEdit, handleCloseModal }: FormPostProps) {
               : 'Publicar'}
         </Button>
       </form>
-    </div>
   )
 }

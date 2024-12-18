@@ -16,7 +16,6 @@ export function usePostsPagination(page: number) {
       )
       return response.data
     },
-    staleTime: 1000 * 60 * 5, // 5 minutos
-    keepPreviousData: true,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   })
 }

@@ -6,6 +6,7 @@ import { PostsList } from '../../components/PostsList'
 import { Post } from '../../types'
 import { useAuth } from '../../context/AuthContext'
 import { useState } from 'react'
+import { useSearchPost } from '../../hooks/useSearchPost'
 
 export const Route = createFileRoute('/Home/')({
   component: RouteComponent,
@@ -13,9 +14,10 @@ export const Route = createFileRoute('/Home/')({
 
 function RouteComponent() {
   const { isAdmin } = useAuth()
-  const [searchTerm, setSearchTerm] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [postToEdit, setPostToEdit] = useState<Post | null>(null)
+
+  const { searchTerm, setSearchTerm, filteredPosts } = useSearchPost()
 
   return (
     <>
@@ -63,7 +65,8 @@ function RouteComponent() {
         )}
       </ModalForm>
       <PostsList
-        searchTerm={searchTerm}
+        posts={filteredPosts} 
+        searchTerm={searchTerm} 
         isAdmin={isAdmin}
         setPostToEdit={setPostToEdit}
         setShowModal={setShowModal}

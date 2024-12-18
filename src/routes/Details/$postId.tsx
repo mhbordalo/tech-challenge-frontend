@@ -40,10 +40,15 @@ function PostDetail() {
   return (
     <div>
       <Intro title={post?.title} description={post?.author} />
-      <p className="text-center w-[65.8%] mt-16 mb-11 mx-auto">
-        {post?.content}
-      </p>
-      <img src={post?.img} className="justify-self-center max-w-[43%] mb-14" />
+      <div className="max-w-screen-xl mx-auto pt-10 px-12">
+        <div className="flex justify-center">
+          <img
+            src={typeof post?.img === 'string' ? post.img : undefined}
+            className="w-full sm:max-w-[60%] md:max-w-[43%] lg:max-w-[35%] mb-4"
+          />
+        </div>
+        <p className="mt-8 mb-11">{post?.content}</p>
+      </div>
     </div>
   )
 }

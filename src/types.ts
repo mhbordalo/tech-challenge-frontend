@@ -18,3 +18,7 @@ export type CreatePost = {
   content: string
   img: string | File | null
 }
+export type PostsResponse = {
+  posts: Post[]
+  totalPages: number
+}
