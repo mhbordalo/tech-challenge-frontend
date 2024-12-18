@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useCreatePost } from '../../hooks/useCreatePost'
 import { useEditPost } from '../../hooks/userEditPost'
 import { Post, EditPost } from '../../types'
+import { Button } from '../Button'
 
 interface FormPostProps {
   postToEdit?: Post
@@ -56,24 +57,79 @@ export function FormPost({ postToEdit, handleCloseModal }: FormPostProps) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Título"
-        required
-      />
-      <textarea
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        placeholder="Conteúdo"
-        required
-      />
-      <input type="file" onChange={handleChangeFile} />
-      {preview && <img src={preview} alt="Preview" />}
-      <button type="submit" disabled={isCreating || isEditing}>
-        {postToEdit ? 'Editar' : 'Criar'}
-      </button>
-    </form>
+        <div className="mb-4">
+          <label
+            htmlFor="title"
+            className="block text-sm text-black font-semibold mb-2"
+          >
+            Título
+          </label>
+          <input
+            type="text"
+            name="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label
+            htmlFor="content"
+            className="block text-sm text-black font-semibold mb-2"
+          >
+            Conteúdo
+          </label>
+          <textarea
+            name="content"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            rows={5}
+            required
+          />
+        </div>
+        <div className="mb-5">
+          <label
+            htmlFor="image-upload"
+            className="block text-sm text-black font-semibold mb-2 cursor-pointer"
+          >
+            Imagem
+          </label>
+          <input
+            type="file"
+            id="image-upload"
+            name="image"
+            accept="image/*"
+            onChange={handleChangeFile}
+            className="hidden"
+          />
+          <label
+            htmlFor="image-upload"
+            className="inline-block px-4 py-2 bg-green-dark text-white rounded-lg hover:bg-green-light transition-colors cursor-pointer"
+          >
+            Escolher Imagem
+          </label>
+          {preview && (
+            <img
+              src={preview}
+              alt="Preview"
+              className="mt-4 w-full h-44 object-cover rounded"
+            />
+          )}
+        </div>
+        <Button
+          size="lg"
+          type="submit"
+          className="w-full"
+          disabled={isCreating || isEditing}
+        >
+          {isCreating || isEditing
+            ? 'Salvando...'
+            : postToEdit
+              ? 'Atualizar'
+              : 'Publicar'}
+        </Button>
+      </form>
   )
 }
