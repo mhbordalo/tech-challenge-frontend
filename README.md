@@ -16,11 +16,13 @@ O objetivo desta interface gráfica é fornecer uma aplicação blogging robusta
 
 ---
 
-## Video de apresentação da API
+## Video de apresentação
+
+[Link do video de apresentação](https://drive.google.com/file/d/17Qe8B81myaIwwkWmZV0VruY_SG76iepM/view?usp=drive_link)
 
 ---
 
-## Tecnologias utilizadas
+## Tecnologias utilizadas no frontend
 
 - React
 - Axios
@@ -95,6 +97,28 @@ Tela 6: Exclusão de Post
 - Permite que o professor exclua um post existente.
 
 ![Delete](public/assets/images/delete.png)
+
+---
+
+## Back-End utilizado
+
+Este repositório contém a implementação do back-end do **Tech Challenge 2** com algumas adaptações.
+
+O sistema está em produção e foi desenvolvido com base nas especificações fornecidas, utilizando o front-end do **Tech Challenge 3**
+
+A API está totalmente documentada usando o Swagger. Você pode acessar a documentação interativa da API através do seguinte link:
+
+[Documentação da API (Swagger)](https://tech-challenge-back-end.vercel.app/api-docs#/)
+
+### Tecnologias utilizadas no backend
+
+- Linguagem: Node.js
+- Framework: Express
+- Banco de Dados:  MongoDB
+- Documentação: Swagger
+- Deploy: Vercel
+
+---
 
 ## Relato de experiências e desafios
 
